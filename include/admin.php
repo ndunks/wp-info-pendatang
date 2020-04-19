@@ -50,7 +50,7 @@ class InfoPendatangAdmin
     public function main()
     {
         if (!empty(@$_GET['page'])) {
-            $page   = strtr($_GET['page'], "/\\'\"%.;:*\0", '----------');
+            $page   = strtr($_GET['page'], "/\\'\"%./;:*\0", '-----------');
             $page	= INFO_PENDATANG_DIR . 'pages/' . $page . '.php';
             include is_file($page) ? $page : INFO_PENDATANG_DIR . 'pages/main.php';
         } else {

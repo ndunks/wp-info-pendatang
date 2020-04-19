@@ -14,8 +14,8 @@ define('INFO_PENDATANG_URL', plugins_url('', __FILE__) . '/');
 class InfoPendatang
 {
     public static $title	= 'Info Pendatang';
-    public static $name	= 'info_pendatang';
-    public static $version= '1.0.0';
+    public static $name		= 'info_pendatang';
+    public static $version	= '1.0.0';
     public static $me		= false;
     public static $config	= null;
 
@@ -24,8 +24,9 @@ class InfoPendatang
         self::$me	=& $this;
 
         add_action('init', array($this, 'init'));
-        //add_action('wp_ajax_info_pendatang', array($this, 'ajax'));
-        
+        add_action('wp_ajax_nopriv_info_pendatang', array($this, 'ajax'));
+        add_action('wp_ajax_info_pendatang', array($this, 'ajax'));
+
         if (is_admin()) {
             include INFO_PENDATANG_DIR . 'include/admin.php';
         }
@@ -53,8 +54,30 @@ class InfoPendatang
                 ]
             ];
         }
+	}
+	// /wp-admin/admin-ajax.php?action=info_pendatang
+    public function ajax()
+    {
+		$do = strtr(@$_GET['do'], "/\\'\"%./;:*\0", '-----------');
+
+		if(is_file(INFO_PENDATANG_DIR . "ajax/$do.php")){
+			$do = INFO_PENDATANG_DIR . "ajax/$do.php";
+		}else{
+			$do = INFO_PENDATANG_DIR . "ajax/main.php";
+		}
+		$result = include($do);
+		if(!empty($result)){
+			if(is_array($result)){
+				header("Content-Type: application/json");
+				die(json_encode($result));
+			}else{
+				header("Content-Type: text/plain");
+				die($result);
+			}
+		}
+        die();
     }
-    
+
     public function init()
     {
         add_shortcode(self::$name, array($this, "shortcode_info_pendatang"));
