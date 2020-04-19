@@ -19,8 +19,11 @@ function info_pendatang_setup()
         `keluhan` TEXT CHARACTER SET ascii COLLATE ascii_general_ci NULL,
         `no_hp` VARCHAR(20) NULL,
         `wa_sent` BOOLEAN NULL,
+        `no_pelapor` VARCHAR(20) NULL,
+        `keterangan` TEXT CHARACTER SET ascii COLLATE ascii_general_ci NULL,
+        `raw` TEXT CHARACTER SET ascii COLLATE ascii_general_ci NULL,
         `dibuat` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY (`id`)
+        PRIMARY KEY (`id`), INDEX( `rt`, `rw`), INDEX( `dusun` )
     ) $charset_collate;";
 
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
