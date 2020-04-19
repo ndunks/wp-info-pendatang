@@ -27,6 +27,7 @@ class InfoPendatang
         add_action('wp_ajax_nopriv_info_pendatang', array($this, 'ajax'));
         add_action('wp_ajax_info_pendatang', array($this, 'ajax'));
 
+		include INFO_PENDATANG_DIR . 'functions.php';
         if (is_admin()) {
             include INFO_PENDATANG_DIR . 'include/admin.php';
         }
@@ -54,27 +55,38 @@ class InfoPendatang
                 ]
             ];
         }
-	}
-	// /wp-admin/admin-ajax.php?action=info_pendatang
+    }
+    // /wp-admin/admin-ajax.php?action=info_pendatang
     public function ajax()
     {
-		$do = strtr(@$_GET['do'], "/\\'\"%./;:*\0", '-----------');
+		global $wpdb;
+        $do = strtr(@$_GET['do'], "/\\'\"%./;:*\0", '-----------');
 
-		if(is_file(INFO_PENDATANG_DIR . "ajax/$do.php")){
-			$do = INFO_PENDATANG_DIR . "ajax/$do.php";
-		}else{
-			$do = INFO_PENDATANG_DIR . "ajax/main.php";
-		}
-		$result = include($do);
-		if(!empty($result)){
-			if(is_array($result)){
-				header("Content-Type: application/json");
-				die(json_encode($result));
-			}else{
-				header("Content-Type: text/plain");
-				die($result);
+        if (is_file(INFO_PENDATANG_DIR . "ajax/$do.php")) {
+            $do = INFO_PENDATANG_DIR . "ajax/$do.php";
+        } else {
+            $do = INFO_PENDATANG_DIR . "ajax/main.php";
+        }
+        try {
+            $result = include($do);
+        } catch (\Exception $th) {
+            if ($th->getCode() > 200 && $th->getCode() < 600) {
+                http_response_code($th->getCode());
+            }else{
+				http_response_code(500);
 			}
+            $result = $th->getMessage();
 		}
+
+        if (!empty($result)) {
+            if (is_array($result)) {
+                header("Content-Type: application/json");
+                die(json_encode($result));
+            } else {
+                header("Content-Type: text/plain");
+                die($result);
+            }
+        }
         die();
     }
 

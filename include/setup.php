@@ -7,7 +7,7 @@ function info_pendatang_setup()
     $table_name = $wpdb->prefix . InfoPendatang::$name;
 
     $sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
-        `id` SMALLINT NOT NULL,
+        `id` SMALLINT NOT NULL AUTO_INCREMENT,
         `nama` INT NOT NULL,
         `nik` VARCHAR(20) CHARACTER SET ascii COLLATE ascii_bin NULL,
         `umur` TINYINT UNSIGNED NULL,
