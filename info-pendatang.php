@@ -39,7 +39,7 @@ class InfoPendatang
         } else {
             //Default config
             self::$config	= [
-                'secret'=> 'InfoPendatang123',
+                'secret'=> uniqid() . uniqid(),
                 'version' => self::$version,
                 'dusun' => [
                     [
