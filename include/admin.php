@@ -6,17 +6,20 @@ class InfoPendatangAdmin
     public function __construct()
     {
         self::$me	=& $this;
-        add_action('init', array($this, 'init'));
         add_action('admin_menu', array($this, 'menu'));
         add_action('admin_bar_menu', array($this, 'admin_bar_menu'), 90);
         add_action('admin_print_scripts', array($this, 'javascripts'));
         add_action('admin_print_styles', array($this, 'stylesheets'));
         register_activation_hook(INFO_PENDATANG_DIR . 'info-pendatang.php', array($this, 'activate'));
         register_deactivation_hook(INFO_PENDATANG_DIR . 'info-pendatang.php', array($this, 'deactivate'));
+        add_action('wp_ajax_info_pendatang', array($this, 'ajax'));
     }
 
-    public function init()
+    public function ajax()
     {
+        // Global functions
+        require INFO_PENDATANG_DIR . 'include/functions.php';
+        info_pendatang_ajax('ajax_admin','ajax');
     }
 
     public function javascripts()

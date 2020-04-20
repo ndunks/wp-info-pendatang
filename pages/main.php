@@ -6,9 +6,8 @@ $result  = info_pendatang_list(null, $_GET['page']);
 <table class="widefat fixed" cellspacing="0">
     <thead>
     <tr>
-        <th class="manage-column column-nik" scope="col">NIK</th>
         <th class="manage-column column-nama" scope="col">Nama</th>
-        <th class="manage-column column-dusun" scope="col">Dusun</th>
+        <th class="manage-column column-alamat" scope="col">Alamat</th>
         <th class="manage-column column-asal-kota" scope="col">Asal Kota</th>
         <th class="manage-column column-tgl-kepulangan" scope="col">Tgl. Kedatangan</th>
         <th class="manage-column column-verified" scope="col">Verified</th>
@@ -18,14 +17,19 @@ $result  = info_pendatang_list(null, $_GET['page']);
     <tbody>
     <?php foreach ($result as $row): ?>
         <tr class="alternate" data-json="<?= esc_attr(json_encode($row)) ?>">
-            <td class="column-nik">
-                <?= esc_html($row->nik) ?: '&mdash;' ?>
-            </td>
             <td class="column-nama">
                 <?= esc_html($row->nama) ?: '&mdash;' ?>
             </td>
-            <td class="column-dusun">
-                <?= esc_html($row->dusun) ?: '&mdash;' ?>
+            <td class="column-alamat">
+                <?php
+                $txt = "";
+                if ($row->rt || $row->rw) {
+                    $txt = "{$row->rt}/{$row->rw}";
+                }
+                if ($row->dusun) {
+                    $txt .= " ({$row->dusun})";
+                }
+                echo $txt ? esc_html($txt) : '&mdash;' ?>
             </td>
             <td class="column-asal-kota">
                 <?= esc_html($row->asal_kota) ?: '&mdash;' ?>
@@ -34,7 +38,7 @@ $result  = info_pendatang_list(null, $_GET['page']);
                 <?= esc_html($row->tgl_kepulangan) ?: '&mdash;' ?>
             </td>
             <td class="column-tgl-verified">
-                <?= $row->verified ? 'Sudah' : 'Belum' ?>
+                <?= $row->verified ? '<span style="color:green">Sudah</span>' : '<span style="color:red">Belum</span>' ?>
             </td>
             <td class="column-aksi">
                 <button  class="button-primary info-pendatang-dialog-button"> Detail </button>
@@ -149,7 +153,7 @@ $result  = info_pendatang_list(null, $_GET['page']);
         },
         open: function () {
             $('.ui-widget-overlay').bind('click', function(){
-            $(id).dialog('close');
+                $(id).dialog('close');
             })
         },
         create: function () {
@@ -158,7 +162,13 @@ $result  = info_pendatang_list(null, $_GET['page']);
     });
 
     $('#info-pendatang-verified-button').click(function(e){
-        alert('Verifi ' + data.id);
+        if(confirm('Anda yakin akan memverifikasi data ini?')){
+            $.post(ajaxurl + '?action=info_pendatang&do=patch&id=' + data.id, {
+                verified: 1
+            }, function(){
+                location.reload();
+            });
+        }
     })
 
     $('#info-pendatang-dialog-save-button').click(function(e){
@@ -171,9 +181,14 @@ $result  = info_pendatang_list(null, $_GET['page']);
                 newData[name] = newVal;
             }
         })
-        console.log(newData);
+
         if(Object.keys(newData).length){
-            $.post(ajaxurl + '?page=info_pendatang&update_id=' + data.id,newData);
+            $.post(ajaxurl + '?action=info_pendatang&do=patch&id=' + data.id, newData, function(){
+                location.reload();
+            });
+        }else{
+            alert('Tidak ada perubahan yang disimpan');
+            $(id).dialog('close');
         }
     })
 

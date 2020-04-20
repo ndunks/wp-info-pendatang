@@ -1,5 +1,43 @@
 <?php
 
+function info_pendatang_ajax($handle_path, $handle_path_fallback = null)
+{
+    global $wpdb;
+    // Clean path traversal
+    $do = strtr(@$_GET['do'], "/\\'\"%./;:*\0", '-----------');
+
+    if (is_file($file = INFO_PENDATANG_DIR . $handle_path . "/$do.php")) {
+        $do = $file;
+    } elseif ($handle_path_fallback
+        && is_file($file = INFO_PENDATANG_DIR . $handle_path_fallback . "/$do.php")) {
+        $do = $file;
+    } else {
+        $do = INFO_PENDATANG_DIR . $handle_path . "/main.php";
+    }
+
+    try {
+        $result = include($do);
+    } catch (\Exception $th) {
+        if ($th->getCode() > 200 && $th->getCode() < 600) {
+            http_response_code($th->getCode());
+        } else {
+            http_response_code(500);
+        }
+        $result = $th->getMessage();
+    }
+
+    if (!empty($result)) {
+        if (is_array($result)) {
+            header("Content-Type: application/json");
+            die(json_encode($result));
+        } else {
+            header("Content-Type: text/plain");
+            die($result);
+        }
+    }
+    die();
+}
+
 function info_pendatang_format_tanggal($tgl)
 {
     // format tgl
@@ -34,6 +72,7 @@ function info_pendatang_format_tanggal($tgl)
     
     return false;
 }
+
 function info_pendatang_list($filter = null, $page = 1, $per_page = 20)
 {
     global $wpdb;
@@ -41,10 +80,37 @@ function info_pendatang_list($filter = null, $page = 1, $per_page = 20)
     if ($page < 1) {
         $page = 1;
     }
-
-    $table = $wpdb->prefix . InfoPendatang::$name;
+    
     $start = ($page - 1) *  $per_page;
-    $query = "SELECT * FROM `$table` ORDER BY dibuat DESC LIMIT $start, $per_page ";
+    $query = "SELECT * FROM " . InfoPendatang::$table .
+            " ORDER BY dibuat DESC LIMIT $start, $per_page ";
     $result= $wpdb->get_results($query);
     return $result;
+}
+
+function info_pendatang_sanitize_data(&$dirty, $allowOtherCols = null)
+{
+    $cols = ['nama', 'nik', 'umur', 'rt', 'rw', 'dusun', 'asal_kota',
+    'tgl_kepulangan', 'keluhan', 'no_hp', 'wa_sent', 'pelapor', 'keterangan' ];
+    if ($allowOtherCols) {
+        $cols = array_merge($cols, $allowOtherCols);
+    }
+    $clean = [];
+
+    foreach ($cols as $col) {
+        if (isset($dirty[ $col ])) {
+            $clean[ $col ] = $dirty[ $col ];
+        }
+    }
+
+    if (isset($clean['tgl_kepulangan'])) {
+        $tgl_valid = info_pendatang_format_tanggal($clean['tgl_kepulangan']);
+        if (empty($tgl_valid)) {
+            throw new Exception("Format tgl_kepulangan salah, contoh: 16/04/2020", 406);
+        } else {
+            $clean['tgl_kepulangan'] = $tgl_valid;
+        }
+    }
+
+    return $clean;
 }

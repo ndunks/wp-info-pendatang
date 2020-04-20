@@ -18,16 +18,18 @@ class InfoPendatang
     public static $version	= '1.0.0';
     public static $me		= false;
     public static $config	= null;
+    public static $table	= null;
 
     public function __construct()
     {
-        self::$me	=& $this;
+        global $table_prefix;
 
+        self::$me	=& $this;
         add_action('init', array($this, 'init'));
         /** No Priv only will fail when loggedin */
         add_action('wp_ajax_nopriv_info_pendatang', array($this, 'ajax'));
-        // TODO, Move it to admin, for update capabilties
-        add_action('wp_ajax_info_pendatang', array($this, 'ajax'));
+        // Set global table name
+        self::$table = $table_prefix . self::$name;
 
         if (is_admin()) {
             include INFO_PENDATANG_DIR . 'include/admin.php';
@@ -57,41 +59,15 @@ class InfoPendatang
             ];
         }
     }
-    // /wp-admin/admin-ajax.php?action=info_pendatang&d=ajax_action
+
+    /**
+     * Ajax handler for external access (not logged WP User)
+     */
     public function ajax()
     {
-        global $wpdb;
         // Global functions
         require INFO_PENDATANG_DIR . 'include/functions.php';
-
-        $do = strtr(@$_GET['do'], "/\\'\"%./;:*\0", '-----------');
-        
-        if (is_file(INFO_PENDATANG_DIR . "ajax/$do.php")) {
-            $do = INFO_PENDATANG_DIR . "ajax/$do.php";
-        } else {
-            $do = INFO_PENDATANG_DIR . "ajax/main.php";
-        }
-        try {
-            $result = include($do);
-        } catch (\Exception $th) {
-            if ($th->getCode() > 200 && $th->getCode() < 600) {
-                http_response_code($th->getCode());
-            }else{
-				http_response_code(500);
-			}
-            $result = $th->getMessage();
-		}
-
-        if (!empty($result)) {
-            if (is_array($result)) {
-                header("Content-Type: application/json");
-                die(json_encode($result));
-            } else {
-                header("Content-Type: text/plain");
-                die($result);
-            }
-        }
-        die();
+        info_pendatang_ajax('ajax');
     }
 
     public function init()
