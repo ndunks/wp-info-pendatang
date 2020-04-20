@@ -10,7 +10,7 @@ function info_pendatang_setup()
         `id` SMALLINT NOT NULL AUTO_INCREMENT,
         `nama` VARCHAR(40) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL,
         `nik` VARCHAR(20) CHARACTER SET ascii COLLATE ascii_bin NULL,
-        `umur` TINYINT UNSIGNED NULL,
+        `umur` DECIMAL(3,1) UNSIGNED NULL,
         `rt` TINYINT UNSIGNED NULL,
         `rw` TINYINT UNSIGNED NULL,
         `dusun` VARCHAR(20) CHARACTER SET ascii COLLATE ascii_general_ci NULL,
