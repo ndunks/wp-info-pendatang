@@ -8,6 +8,12 @@ foreach (array_merge($_GET, $_POST) as $key => $value) {
     $raw[ strtolower($key) ] = stripcslashes(trim($value));
 }
 
+if (!isset($raw['key']) || $raw['key'] != InfoPendatang::$config['secret']) {
+    throw new Exception("Not allowed", 403);
+}
+
+unset($raw['key']);
+
 if (empty($raw['nama'])) {
     throw new Exception("Nama tidak boleh kosong", 406);
 }
