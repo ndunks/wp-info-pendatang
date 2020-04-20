@@ -6,6 +6,7 @@
     </a>
 </div>
 <h1>Info Pendatang</h1>
+<p>Gunakan shortcode <code>[info_pendatang]</code> untuk menampikan ringkasan pendatang pada halaman</p>
 <?php
 $result  = info_pendatang_list(null, $_GET['page']);
 ?>
@@ -183,7 +184,8 @@ $result  = info_pendatang_list(null, $_GET['page']);
             var el = $(this);
             var name = el.attr('name');
             var newVal = el.val()
-            if( !newVal != !data[name] && newVal != data[name] ){
+
+            if( (!!newVal) != (!!data[name]) || ( !!(newVal || data[name] ) && newVal != data[name]) ){
                 newData[name] = newVal;
             }
         })
