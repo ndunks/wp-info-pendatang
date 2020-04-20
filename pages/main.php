@@ -1,4 +1,10 @@
-
+<div style="float: right; padding: 10px;">
+    <a href="<?= admin_url('admin.php?page=' . InfoPendatang::$name . '&view=settings') ?>"
+        class="button-primary info_pendatang_button">
+        <span class="dashicons dashicons-admin-settings"></span>
+        <span>Pengaturan</span>
+    </a>
+</div>
 <h1>Info Pendatang</h1>
 <?php
 $result  = info_pendatang_list(null, $_GET['page']);
