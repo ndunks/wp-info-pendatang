@@ -34,3 +34,7 @@ function info_pendatang_format_tanggal($tgl)
     
     return false;
 }
+function info_pendatang_list($filter = null, $limit = 20, $pos = 0){
+    global $wpdb;
+    
+}

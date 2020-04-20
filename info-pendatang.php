@@ -27,7 +27,6 @@ class InfoPendatang
         add_action('wp_ajax_nopriv_info_pendatang', array($this, 'ajax'));
         add_action('wp_ajax_info_pendatang', array($this, 'ajax'));
 
-		include INFO_PENDATANG_DIR . 'functions.php';
         if (is_admin()) {
             include INFO_PENDATANG_DIR . 'include/admin.php';
         }
@@ -59,7 +58,8 @@ class InfoPendatang
     // /wp-admin/admin-ajax.php?action=info_pendatang
     public function ajax()
     {
-		global $wpdb;
+        global $wpdb;
+        include INFO_PENDATANG_DIR . 'include/functions.php';
         $do = strtr(@$_GET['do'], "/\\'\"%./;:*\0", '-----------');
 
         if (is_file(INFO_PENDATANG_DIR . "ajax/$do.php")) {
