@@ -114,3 +114,41 @@ function info_pendatang_sanitize_data(&$dirty, $allowOtherCols = null)
 
     return $clean;
 }
+
+function info_pendatang_total(){
+    global $wpdb;
+    
+    if (InfoPendatang::has_result('total')) {
+        return InfoPendatang::result('total');
+    }else{
+        $query = "SELECT count(*) as jml FROM " . InfoPendatang::$table;
+        $result = $wpdb->get_results($query);
+        return InfoPendatang::result('total', $result[0]->jml);
+    }
+}
+
+function info_pendatang_summary()
+{
+    global $wpdb;
+    
+    if (InfoPendatang::has_result('summary')) {
+        return InfoPendatang::result('summary');
+    }
+    $query = "SELECT rt, rw, count(rw) as jml FROM " .
+            InfoPendatang::$table . " GROUP BY rw,rt order by rw,rt";
+    $result = $wpdb->get_results($query);
+    $mapped = [];
+    $totalRW = [];
+    $total = 0;
+    foreach ($result as $row) {
+        if (! isset($totalRW[ $row->rw ])) {
+            $totalRW[ $row->rw ] = 0;
+            $mapped[ $row->rw ] = [];
+        }
+        $totalRW[$row->rw] +=  $row->jml;
+        $mapped[ $row->rw ][ $row->rt ] = $row->jml;
+        $total += $row->jml;
+    }
+    InfoPendatang::result('total', $total);
+    return InfoPendatang::result('summary', compact('total', 'totalRW', 'mapped', 'result'));
+}

@@ -19,6 +19,7 @@ class InfoPendatang
     public static $me		= false;
     public static $config	= null;
     public static $table	= null;
+    public static $global	= [];
 
     public function __construct()
     {
@@ -30,7 +31,8 @@ class InfoPendatang
         add_action('wp_ajax_nopriv_info_pendatang', array($this, 'ajax'));
         // Set global table name
         self::$table = $table_prefix . self::$name;
-
+        // Global functions
+        include INFO_PENDATANG_DIR . 'include/functions.php';
         if (is_admin()) {
             include INFO_PENDATANG_DIR . 'include/admin.php';
         }
@@ -65,19 +67,20 @@ class InfoPendatang
      */
     public function ajax()
     {
-        // Global functions
-        require INFO_PENDATANG_DIR . 'include/functions.php';
         info_pendatang_ajax('ajax');
     }
 
     public function init()
     {
-        add_shortcode(self::$name, array($this, "shortcode_info_pendatang"));
+        add_shortcode(self::$name . "_summary", array($this, "shortcode_info_pendatang_summary"));
+        add_shortcode(self::$name . "_total", "info_pendatang_total");
     }
 
-    public function shortcode_info_pendatang($arg, $conteng, $tag)
+    public function shortcode_info_pendatang_summary($arg, $conteng, $tag)
     {
+        ob_start();
         include INFO_PENDATANG_DIR . "pages/display.php";
+        return ob_get_clean();
     }
 
     public static function commit_option($new_key = null, $new_val = null)
@@ -88,6 +91,22 @@ class InfoPendatang
         return update_option(self::$name, self::$config, true);
     }
     
+    public static function has_result($var_name)
+    {
+        return isset( self::$global[$var_name] );
+    }
+
+    /**
+     * Get or set global result
+     */
+    public static function result($var_name, $setValue = false)
+    {
+        if( $setValue !== false){
+            return self::$global[ $var_name ] = $setValue;
+        }else{
+            return self::$global[ $var_name ];
+        }
+    }
     public static function run()
     {
         return self::$me ? self::$me : new InfoPendatang();

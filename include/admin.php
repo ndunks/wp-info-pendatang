@@ -17,8 +17,6 @@ class InfoPendatangAdmin
 
     public function ajax()
     {
-        // Global functions
-        require INFO_PENDATANG_DIR . 'include/functions.php';
         info_pendatang_ajax('ajax_admin','ajax');
     }
 
@@ -56,9 +54,6 @@ class InfoPendatangAdmin
     //View Router
     public function main()
     {
-        // Global functions
-        require INFO_PENDATANG_DIR . 'include/functions.php';
-
         if (!empty(@$_GET['view'])) {
             $view   = strtr($_GET['view'], "/\\'\"%./;:*\0", '-----------');
             $view	= INFO_PENDATANG_DIR . 'pages/' . $view . '.php';
