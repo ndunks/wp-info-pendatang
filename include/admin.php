@@ -17,18 +17,22 @@ class InfoPendatangAdmin
 
     public function init()
     {
-        wp_register_script(InfoPendatang::$name, INFO_PENDATANG_URL . 'res/js/script.js', ['jquery' ], InfoPendatang::$version, true);
-        wp_register_style(InfoPendatang::$name, INFO_PENDATANG_URL . 'res/css/style.css');
     }
 
     public function javascripts()
     {
-        wp_enqueue_script(InfoPendatang::$name);
+        if (@$_GET['page'] != InfoPendatang::$name) {
+            return;
+        }
+        wp_enqueue_script(InfoPendatang::$name, INFO_PENDATANG_URL . 'res/js/script.js', ['jquery-ui-dialog'], InfoPendatang::$version);
     }
 
     public function stylesheets()
     {
-        wp_enqueue_style(InfoPendatang::$name);
+        if (@$_GET['page'] != InfoPendatang::$name) {
+            return;
+        }
+        wp_enqueue_style(InfoPendatang::$name, INFO_PENDATANG_URL . 'res/css/style.css', ['wp-jquery-ui-dialog'], InfoPendatang::$version);
     }
 
     public function menu()
@@ -49,10 +53,13 @@ class InfoPendatangAdmin
     //View Router
     public function main()
     {
-        if (!empty(@$_GET['page'])) {
-            $page   = strtr($_GET['page'], "/\\'\"%./;:*\0", '-----------');
-            $page	= INFO_PENDATANG_DIR . 'pages/' . $page . '.php';
-            include is_file($page) ? $page : INFO_PENDATANG_DIR . 'pages/main.php';
+        // Global functions
+        require INFO_PENDATANG_DIR . 'include/functions.php';
+
+        if (!empty(@$_GET['view'])) {
+            $view   = strtr($_GET['view'], "/\\'\"%./;:*\0", '-----------');
+            $view	= INFO_PENDATANG_DIR . 'pages/' . $view . '.php';
+            include is_file($view) ? $view : INFO_PENDATANG_DIR . 'pages/main.php';
         } else {
             include INFO_PENDATANG_DIR . 'pages/main.php';
         }

@@ -24,7 +24,9 @@ class InfoPendatang
         self::$me	=& $this;
 
         add_action('init', array($this, 'init'));
+        /** No Priv only will fail when loggedin */
         add_action('wp_ajax_nopriv_info_pendatang', array($this, 'ajax'));
+        // TODO, Move it to admin, for update capabilties
         add_action('wp_ajax_info_pendatang', array($this, 'ajax'));
 
         if (is_admin()) {
@@ -55,13 +57,15 @@ class InfoPendatang
             ];
         }
     }
-    // /wp-admin/admin-ajax.php?action=info_pendatang
+    // /wp-admin/admin-ajax.php?action=info_pendatang&d=ajax_action
     public function ajax()
     {
         global $wpdb;
-        include INFO_PENDATANG_DIR . 'include/functions.php';
-        $do = strtr(@$_GET['do'], "/\\'\"%./;:*\0", '-----------');
+        // Global functions
+        require INFO_PENDATANG_DIR . 'include/functions.php';
 
+        $do = strtr(@$_GET['do'], "/\\'\"%./;:*\0", '-----------');
+        
         if (is_file(INFO_PENDATANG_DIR . "ajax/$do.php")) {
             $do = INFO_PENDATANG_DIR . "ajax/$do.php";
         } else {

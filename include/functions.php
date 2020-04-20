@@ -34,7 +34,17 @@ function info_pendatang_format_tanggal($tgl)
     
     return false;
 }
-function info_pendatang_list($filter = null, $limit = 20, $pos = 0){
+function info_pendatang_list($filter = null, $page = 1, $per_page = 20)
+{
     global $wpdb;
-    
+    $page = intval($page);
+    if ($page < 1) {
+        $page = 1;
+    }
+
+    $table = $wpdb->prefix . InfoPendatang::$name;
+    $start = ($page - 1) *  $per_page;
+    $query = "SELECT * FROM `$table` ORDER BY dibuat DESC LIMIT $start, $per_page ";
+    $result= $wpdb->get_results($query);
+    return $result;
 }
