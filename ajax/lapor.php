@@ -5,7 +5,7 @@ $row = [];
 
 // normalize
 foreach ($_GET as $key => $value) {
-    $raw[ strtolower($key) ] = trim($value);
+    $raw[ strtolower($key) ] = stripcslashes(trim($value));
 }
 
 unset($raw['action'],$raw['do']);
@@ -15,7 +15,7 @@ if (empty($raw['nama'])) {
 }
 
 $cols = ['nama', 'nik', 'umur', 'rt', 'rw', 'dusun', 'asal_kota',
-        'tgl_kepulangan', 'keluhan', 'no_hp', 'wa_sent', 'no_pelapor', 'keterangan' ];
+        'tgl_kepulangan', 'keluhan', 'no_hp', 'wa_sent', 'pelapor', 'keterangan' ];
 
 foreach ($cols as $col) {
     if (isset($raw[ $col ])) {
@@ -47,6 +47,7 @@ if (isset($row['rw'])) {
 }
 
 $row['raw'] = serialize($raw);
+$row['sumber'] = 'API_WA';
 if( $wpdb->insert($wpdb->prefix . InfoPendatang::$name, $row) ){
     echo "ok";
 }else{
