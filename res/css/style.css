@@ -3,10 +3,16 @@
     line-height: 20px !important;
     padding-top: 2px !important;
 }
+
 .info_pendatang_settings_dusun_item{
     float: left;
     background-color: whitesmoke;
     padding: 5px;
     margin: 10px;
     border: solid 1px #e2e2e2;
+}
+
+.info-pendatang-table {
+    width: 100%;
+    border-collapse: collapse;
 }

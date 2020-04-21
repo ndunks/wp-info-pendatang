@@ -17,7 +17,7 @@ class InfoPendatangAdmin
 
     public function ajax()
     {
-        info_pendatang_ajax('ajax_admin','ajax');
+        info_pendatang_ajax('ajax_admin', 'ajax');
     }
 
     public function javascripts()
@@ -25,7 +25,8 @@ class InfoPendatangAdmin
         if (@$_GET['page'] != InfoPendatang::$name) {
             return;
         }
-        wp_enqueue_script(InfoPendatang::$name, INFO_PENDATANG_URL . 'res/js/script.js', ['jquery-ui-dialog'], InfoPendatang::$version);
+        wp_enqueue_script('jquery-ui-dialog');
+        wp_enqueue_script(InfoPendatang::$name);
     }
 
     public function stylesheets()
@@ -33,7 +34,8 @@ class InfoPendatangAdmin
         if (@$_GET['page'] != InfoPendatang::$name) {
             return;
         }
-        wp_enqueue_style(InfoPendatang::$name, INFO_PENDATANG_URL . 'res/css/style.css', ['wp-jquery-ui-dialog'], InfoPendatang::$version);
+        wp_enqueue_style('wp-jquery-ui-dialog');
+        wp_enqueue_style(InfoPendatang::$name);
     }
 
     public function menu()

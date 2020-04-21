@@ -29,6 +29,8 @@ class InfoPendatang
         add_action('init', array($this, 'init'));
         /** No Priv only will fail when loggedin */
         add_action('wp_ajax_nopriv_info_pendatang', array($this, 'ajax'));
+        add_action('wp_print_scripts', array($this, 'javascripts'));
+        add_action('wp_print_styles', array($this, 'stylesheets'));
         // Set global table name
         self::$table = $table_prefix . self::$name;
         // Global functions
@@ -73,7 +75,20 @@ class InfoPendatang
     public function init()
     {
         add_shortcode(self::$name, array($this, "shortcode_info_pendatang"));
+        wp_register_script(self::$name, INFO_PENDATANG_URL . 'res/js/script.js', true);
+        wp_register_style(self::$name, INFO_PENDATANG_URL . 'res/css/style.css');
     }
+
+    public function javascripts()
+    {
+        wp_enqueue_script(InfoPendatang::$name);
+    }
+
+    public function stylesheets()
+    {
+        wp_enqueue_style(InfoPendatang::$name);
+    }
+
 
     public function shortcode_info_pendatang($atts_ori, $content, $tag)
     {
@@ -88,7 +103,7 @@ class InfoPendatang
         if (function_exists($function)) {
             return call_user_func_array($function, $atts);
         } else {
-            return '<i style="color:red">Invalid shortcode type ' . $type . '</i>';
+            return '<i style="color:red">shortcode tidak dikenal ' . $type . '</i>';
         }
     }
 
