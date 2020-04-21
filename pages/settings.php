@@ -24,6 +24,15 @@
     <input type="text" class="large-text" readonly value="<?=
     admin_url() . 'admin-ajax.php?action=' . InfoPendatang::$name ?>" />
 </fieldset>
+<fieldset>
+    <legend>
+        <h3>Tools</h3>
+    </legend>
+    <a class="button-secondary" target="_BLANK" href="<?=
+        admin_url() . 'admin-ajax.php?action=' . InfoPendatang::$name ?>&do=fix_dusun">
+        Sesuaikan nama dusun pada data yg tersimpan (fix_dusun)
+    </a>
+</fieldset>
 <script>
     var dusuns = <?= json_encode(InfoPendatang:: $config['dusun']) ?>;
 </script>

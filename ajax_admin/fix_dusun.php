@@ -16,4 +16,5 @@ foreach ($result as $row) {
     }
 }
 require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-return dbDelta(implode(";\n", $updates));
+var_dump(dbDelta(implode(";\n", $updates)));
+die("\nOK");
