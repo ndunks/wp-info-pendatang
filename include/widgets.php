@@ -35,6 +35,7 @@ class InfoPendatangWidget extends WP_Widget
         }
         $function_call = "info_pendatang_shortcode_$type";
         echo call_user_func($function_call);
+        echo '<p>Laporan Terakhir: <b>' . info_pendatang_get_last_update() . '</b></p>';
         echo $instance['html'];
         echo $args['after_widget'];
     }
