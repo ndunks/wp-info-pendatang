@@ -78,9 +78,8 @@ class InfoPendatang
     public function init()
     {
         add_shortcode(self::$name, array($this, "shortcode_info_pendatang"));
-        wp_register_script(self::$name, INFO_PENDATANG_URL . 'res/js/script.js', true);
-        wp_register_style(self::$name, INFO_PENDATANG_URL . 'res/css/style.css');
     }
+
     public function init_widget()
     {
         register_widget('InfoPendatangWidget');
@@ -88,14 +87,13 @@ class InfoPendatang
 
     public function javascripts()
     {
-        wp_enqueue_script(InfoPendatang::$name);
+        wp_enqueue_script(InfoPendatang::$name, INFO_PENDATANG_URL . 'res/js/script.js', [], self::$version);
     }
 
     public function stylesheets()
     {
-        wp_enqueue_style(InfoPendatang::$name);
+        wp_enqueue_style(InfoPendatang::$name, self::$name, INFO_PENDATANG_URL . 'res/css/style.css', [], self::$version);
     }
-
 
     public function shortcode_info_pendatang($atts_ori, $content, $tag)
     {
