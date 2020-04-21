@@ -72,15 +72,24 @@ class InfoPendatang
 
     public function init()
     {
-        add_shortcode(self::$name . "_summary", array($this, "shortcode_info_pendatang_summary"));
-        add_shortcode(self::$name . "_total", "info_pendatang_total");
+        add_shortcode(self::$name, array($this, "shortcode_info_pendatang"));
     }
 
-    public function shortcode_info_pendatang_summary($arg, $conteng, $tag)
+    public function shortcode_info_pendatang($atts_ori, $content, $tag)
     {
-        ob_start();
-        include INFO_PENDATANG_DIR . "pages/display.php";
-        return ob_get_clean();
+        $atts = array_change_key_case((array)$atts_ori, CASE_LOWER);
+        // override default attributes with user attributes
+        if (empty($atts) || empty($atts[0])) {
+            $atts[0] = 'summary';
+        }
+        $type = array_shift($atts);
+        include_once INFO_PENDATANG_DIR . "include/shortcodes.php";
+        $function = InfoPendatang::$name . "_shortcode_" . $type;
+        if (function_exists($function)) {
+            return call_user_func_array($function, $atts);
+        } else {
+            return '<i style="color:red">Invalid shortcode type ' . $type . '</i>';
+        }
     }
 
     public static function commit_option($new_key = null, $new_val = null)
@@ -93,7 +102,7 @@ class InfoPendatang
     
     public static function has_result($var_name)
     {
-        return isset( self::$global[$var_name] );
+        return isset(self::$global[$var_name]);
     }
 
     /**
@@ -101,9 +110,9 @@ class InfoPendatang
      */
     public static function result($var_name, $setValue = false)
     {
-        if( $setValue !== false){
+        if ($setValue !== false) {
             return self::$global[ $var_name ] = $setValue;
-        }else{
+        } else {
             return self::$global[ $var_name ];
         }
     }

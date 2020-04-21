@@ -115,19 +115,7 @@ function info_pendatang_sanitize_data(&$dirty, $allowOtherCols = null)
     return $clean;
 }
 
-function info_pendatang_total(){
-    global $wpdb;
-    
-    if (InfoPendatang::has_result('total')) {
-        return InfoPendatang::result('total');
-    }else{
-        $query = "SELECT count(*) as jml FROM " . InfoPendatang::$table;
-        $result = $wpdb->get_results($query);
-        return InfoPendatang::result('total', $result[0]->jml);
-    }
-}
-
-function info_pendatang_summary()
+function info_pendatang_get_summary()
 {
     global $wpdb;
     

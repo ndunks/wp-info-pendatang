@@ -1,6 +1,6 @@
 <?php
 
-$summary = info_pendatang_summary();
+$summary = info_pendatang_get_summary();
 $total = 0;
 ?>
 <table>
