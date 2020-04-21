@@ -122,40 +122,42 @@ function info_pendatang_get_result()
     if (InfoPendatang::has_result('result')) {
         return InfoPendatang::result('result');
     }
+    $rw_maps = [];
+    foreach (InfoPendatang::$config['dusun'] as $dusun) {
+        foreach ($dusun['rw'] as $rw) {
+            $rw_maps[$rw] = $dusun['nama'];
+        }
+    }
     $query = "SELECT dusun, rt, rw, count(rw) as jml FROM " .
             InfoPendatang::$table . " GROUP BY rw,rt order by rw,rt";
-    return InfoPendatang::result('result', $wpdb->get_results($query));
-}
-
-function info_pendatang_get_summary()
-{
-    $result = info_pendatang_get_result();
-    $mapped = [];
-    $totalRW = [];
-    $total = 0;
-    foreach ($result as $row) {
-        if (! isset($totalRW[ $row->rw ])) {
-            $totalRW[ $row->rw ] = 0;
-            $mapped[ $row->rw ] = [];
+    $result = $wpdb->get_results($query);
+    foreach ($result as &$row) {
+        if (empty($row->dusun)) {
+            // Auto set dusun name based on config
+            if (isset($rw_maps[ $row->rw ])) {
+                $row->dusun = $rw_maps[ $row->rw ];
+            } else {
+                $row->dusun = '(Kosong)';
+            }
         }
-        $totalRW[$row->rw] +=  $row->jml;
-        $mapped[ $row->rw ][ $row->rt ] = $row->jml;
-        $total += $row->jml;
     }
-    InfoPendatang::result('total', $total);
-    return InfoPendatang::result('summary', compact('total', 'totalRW', 'mapped', 'result'));
+    return InfoPendatang::result('result', $result);
 }
 
-function info_pendatang_get_per_dusun()
+function info_pendatang_get_rtrw()
 {
+    if (InfoPendatang::has_result('rtrw')) {
+        return InfoPendatang::result('rtrw');
+    }
+    
     $result = info_pendatang_get_result();
-    $per_dusun = [];
+    $rtrw = [];
     foreach ($result as $row) {
-        $nama_dusun = empty($row->dusun) ? '(Kosong)' : $row->dusun;
-        if (! isset($per_dusun[ $nama_dusun])) {
-            $per_dusun[ $nama_dusun] = [];
+
+        if (! isset($rtrw[ $row->dusun ])) {
+            $rtrw[ $row->dusun] = [];
         }
-        $dusun =& $per_dusun[ $nama_dusun];
+        $dusun =& $rtrw[ $row->dusun];
 
         if (! isset($dusun[ $row->rw ])) {
             $dusun[ $row->rw ] = [];
@@ -164,5 +166,33 @@ function info_pendatang_get_per_dusun()
         $rw[ $row->rt ] = $row->jml;
         unset($dusun, $rw);
     }
-    return InfoPendatang::result('per_dusun', $per_dusun);
+    return InfoPendatang::result('rtrw', $rtrw);
+}
+
+function info_pendatang_get_summary()
+{
+    if (InfoPendatang::has_result('summary')) {
+        return InfoPendatang::result('summary');
+    }
+
+    $result = info_pendatang_get_result();
+    $summary = [];
+    foreach ($result as $row) {
+        if(!isset($summary[ $row->dusun ])){
+            $summary[ $row->dusun ] = 0;
+        }
+        $summary[ $row->dusun ] += $row->jml;
+    }
+    return InfoPendatang::result('summary', $summary);
+}
+
+function info_pendatang_get_asal_kota()
+{
+    global $wpdb;
+    if (InfoPendatang::has_result('asal_kota')) {
+        return InfoPendatang::result('asal_kota');
+    }
+    $query = "SELECT asal_kota, count(*) as jml FROM " . 
+    InfoPendatang::$table . " group by asal_kota order by jml desc";
+    return InfoPendatang::result('asal_kota', $wpdb->get_results($query));
 }
