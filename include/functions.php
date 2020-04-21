@@ -16,6 +16,11 @@ function info_pendatang_ajax($handle_path, $handle_path_fallback = null)
     } else {
         $do = INFO_PENDATANG_DIR . "ajax/main.php";
     }
+    $_JSON = [];
+    // Parse JSON
+    if (strpos(strtolower($_SERVER['HTTP_CONTENT_TYPE']), 'application/json') !== false) {
+        $_JSON = json_decode(file_get_contents('php://input'), true);
+    }
 
     try {
         $result = include($do);

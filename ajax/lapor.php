@@ -4,7 +4,7 @@ $raw = [];
 $row = [];
 
 // normalize
-foreach (array_merge($_GET, $_POST) as $key => $value) {
+foreach (array_merge($_GET, $_POST, $_JSON) as $key => $value) {
     $raw[ strtolower($key) ] = stripcslashes(trim($value));
 }
 
@@ -34,11 +34,10 @@ if (isset($row['rw'])) {
     }
 }
 
-$row['raw'] = serialize($raw);
+$row['raw'] = isset($raw['raw']) ? $raw['raw'] : serialize($raw);
 $row['sumber'] = 'API_WA';
 if ($wpdb->insert(InfoPendatang::$table, $row)) {
     return "ok";
 } else {
     throw new Exception("Gagal insert DB", 500);
 }
-
