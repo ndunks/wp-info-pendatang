@@ -63,7 +63,12 @@
           me.dialog('close');
         }
       })
-
+      $('#info-pendatang-dialog-delete-button').click(function (e) {
+        if (!confirm('Yakin hapus data ini?')) return;
+        $.get(ajaxurl + '?action=info_pendatang&do=delete&id=' + data.id, function () {
+          location.reload();
+        });
+      })
       // bind a button or a link to open the dialog
       $('.info-pendatang-dialog-button').click(function (e) {
         e.preventDefault();

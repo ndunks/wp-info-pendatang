@@ -153,5 +153,10 @@ $result  = info_pendatang_list(null, $_GET['page']);
             </td>
         </tr>
     </table>
-    <button id="info-pendatang-dialog-save-button" class="button-primary"> Simpan Perubahan </button>
+    <div>
+        <button id="info-pendatang-dialog-delete-button" class="button-secondary"> (!) HAPUS </button>
+        <button style="float: right"  id="info-pendatang-dialog-save-button" class="button-primary"> Simpan Perubahan </button>
+    </div>
+    <div class="clear"></div>
+
 </div>

@@ -92,7 +92,7 @@ class InfoPendatang
 
     public function stylesheets()
     {
-        wp_enqueue_style(InfoPendatang::$name, self::$name, INFO_PENDATANG_URL . 'res/css/style.css', [], self::$version);
+        wp_enqueue_style(InfoPendatang::$name, INFO_PENDATANG_URL . 'res/css/style.css', [], self::$version);
     }
 
     public function shortcode_info_pendatang($atts_ori, $content, $tag)
