@@ -31,10 +31,13 @@ class InfoPendatang
         add_action('wp_ajax_nopriv_info_pendatang', array($this, 'ajax'));
         add_action('wp_print_scripts', array($this, 'javascripts'));
         add_action('wp_print_styles', array($this, 'stylesheets'));
+        add_action('widgets_init', array($this, 'init_widget'));
         // Set global table name
         self::$table = $table_prefix . self::$name;
         // Global functions
         include INFO_PENDATANG_DIR . 'include/functions.php';
+        // Widgets
+        include INFO_PENDATANG_DIR . 'include/widgets.php';
         if (is_admin()) {
             include INFO_PENDATANG_DIR . 'include/admin.php';
         }
@@ -77,6 +80,10 @@ class InfoPendatang
         add_shortcode(self::$name, array($this, "shortcode_info_pendatang"));
         wp_register_script(self::$name, INFO_PENDATANG_URL . 'res/js/script.js', true);
         wp_register_style(self::$name, INFO_PENDATANG_URL . 'res/css/style.css');
+    }
+    public function init_widget()
+    {
+        register_widget('InfoPendatangWidget');
     }
 
     public function javascripts()
