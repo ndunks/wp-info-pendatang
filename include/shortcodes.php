@@ -12,6 +12,12 @@ function info_pendatang_shortcode_total()
         return InfoPendatang::result('total', $result[0]->jml);
     }
 }
+
+function info_pendatang_shortcode_last_update()
+{
+    return info_pendatang_get_last_update();
+}
+
 function info_pendatang_shortcode_asal_kota()
 {
     $result = info_pendatang_get_asal_kota();

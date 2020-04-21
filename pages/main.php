@@ -26,6 +26,10 @@
         <td><code>[info_pendatang total]</code></td>
         <td>Menampikan jumlah total pendatang</td>
     </tr>
+    <tr>
+        <td><code>[info_pendatang last_update]</code></td>
+        <td>Menampikan jumlah last_update pendatang</td>
+    </tr>
 </table>
 <hr />
 

@@ -11,9 +11,9 @@ function info_pendatang_ajax($handle_path, $handle_path_fallback = null)
     } elseif ($handle_path_fallback
         && is_file($file = INFO_PENDATANG_DIR . $handle_path_fallback . "/$do.php")) {
         $do = $file;
-    } elseif( is_file(INFO_PENDATANG_DIR . $handle_path . "/main.php") ) {
+    } elseif (is_file(INFO_PENDATANG_DIR . $handle_path . "/main.php")) {
         $do = $file;
-    }else{
+    } else {
         $do = INFO_PENDATANG_DIR . "ajax/main.php";
     }
 
@@ -38,6 +38,13 @@ function info_pendatang_ajax($handle_path, $handle_path_fallback = null)
         }
     }
     die();
+}
+
+function info_pendatang_format_tanggal_indo($tgl)
+{
+    $comp = explode(' ', $tgl);
+    $comp[0] = explode('-', $comp[0]);
+    return "{$comp[0][2]}/{$comp[0][1]}/{$comp[0][0]} {$comp[1]}";
 }
 
 function info_pendatang_format_tanggal($tgl)
@@ -155,7 +162,6 @@ function info_pendatang_get_rtrw()
     $result = info_pendatang_get_result();
     $rtrw = [];
     foreach ($result as $row) {
-
         if (! isset($rtrw[ $row->dusun ])) {
             $rtrw[ $row->dusun] = [];
         }
@@ -180,7 +186,7 @@ function info_pendatang_get_summary()
     $result = info_pendatang_get_result();
     $summary = [];
     foreach ($result as $row) {
-        if(!isset($summary[ $row->dusun ])){
+        if (!isset($summary[ $row->dusun ])) {
             $summary[ $row->dusun ] = 0;
         }
         $summary[ $row->dusun ] += $row->jml;
@@ -194,7 +200,19 @@ function info_pendatang_get_asal_kota()
     if (InfoPendatang::has_result('asal_kota')) {
         return InfoPendatang::result('asal_kota');
     }
-    $query = "SELECT asal_kota, count(*) as jml FROM " . 
+    $query = "SELECT asal_kota, count(*) as jml FROM " .
     InfoPendatang::$table . " group by asal_kota order by jml desc";
     return InfoPendatang::result('asal_kota', $wpdb->get_results($query));
+}
+
+function info_pendatang_get_last_update()
+{
+    global $wpdb;
+    if (InfoPendatang::has_result('last_update')) {
+        return InfoPendatang::result('last_update');
+    }
+
+    $query = "SELECT max(dibuat) as tgl FROM " .  InfoPendatang::$table;
+    $tgl   = InfoPendatang::result('last_update', $wpdb->get_results($query)[0]->tgl);
+    return info_pendatang_format_tanggal_indo($tgl);
 }
