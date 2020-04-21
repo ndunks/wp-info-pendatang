@@ -11,7 +11,7 @@ function info_pendatang_ajax($handle_path, $handle_path_fallback = null)
     } elseif ($handle_path_fallback
         && is_file($file = INFO_PENDATANG_DIR . $handle_path_fallback . "/$do.php")) {
         $do = $file;
-    } elseif (is_file(INFO_PENDATANG_DIR . $handle_path . "/main.php")) {
+    } elseif (is_file($file = INFO_PENDATANG_DIR . $handle_path . "/main.php")) {
         $do = $file;
     } else {
         $do = INFO_PENDATANG_DIR . "ajax/main.php";

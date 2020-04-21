@@ -37,9 +37,8 @@ if (isset($row['rw'])) {
 $row['raw'] = serialize($raw);
 $row['sumber'] = 'API_WA';
 if ($wpdb->insert(InfoPendatang::$table, $row)) {
-    echo "ok";
+    return "ok";
 } else {
     throw new Exception("Gagal insert DB", 500);
 }
 
-echo json_encode($row, JSON_PRETTY_PRINT);
