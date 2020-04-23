@@ -115,15 +115,16 @@ class InfoPendatangTickerWidget extends WP_Widget
             $lines = array_slice($lines, 0, $instance['limit']);
         }
         $lines[] = '<b>Total ' . info_pendatang_get_total() . ' Orang';
+        $lines[] = '<b>Laporan Terakhir ' . info_pendatang_get_last_update();
         echo $args['before_widget'];
-        echo '<marquee behavior="scroll" direction="left">';
+        echo '<div class="info-pendatang-ticker-text">';
         printf('<a class="link" href="%s">', esc_attr($instance['link']));
         if (! empty($title)) {
             echo "<b>$title : </b>";
         }
         echo implode("&nbsp;&nbsp;&bull;&nbsp;&nbsp;", $lines);
         echo '</a>';
-        echo '</marquee>';
+        echo '</div>';
         echo $args['after_widget'];
     }
     private function content_summary($data)

@@ -3,3 +3,51 @@
     width: 100%;
     border-collapse: collapse;
 }
+
+.info-pendatang-ticker-text {
+ overflow: hidden;
+ padding: 10px 0px;
+}
+
+.info-pendatang-ticker-text > a {
+    -moz-transform:translateX(100%);
+    -webkit-transform:translateX(100%);
+    transform:translateX(100%);
+    -moz-animation: scroll-left 25s linear infinite;
+    -webkit-animation: scroll-left 25s linear infinite;
+    animation: scroll-left 25s linear infinite;
+    color: white !important;
+    background-color: #00b306;
+    padding: 2px 10px;
+    border-radius: 23px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: visible;
+    box-shadow: 3px 3px 7px #0000007a;
+}
+/* Move it (define the animation) */
+@-moz-keyframes scroll-left {
+ 0%   { -moz-transform: translateX(100%); }
+ 100% { -moz-transform: translateX(-100%); }
+}
+@-webkit-keyframes scroll-left {
+ 0%   { -webkit-transform: translateX(100%); }
+ 100% { -webkit-transform: translateX(-100%); }
+}
+@keyframes scroll-left {
+ 0%   { 
+ -moz-transform: translateX(100%); /* Browser bug fix */
+ -webkit-transform: translateX(100%); /* Browser bug fix */
+ transform: translateX(100%); 		
+ }
+ 100% { 
+ -moz-transform: translateX(-100%); /* Browser bug fix */
+ -webkit-transform: translateX(-100%); /* Browser bug fix */
+ transform: translateX(-100%); 
+ }
+}
+
+
+.info-pendatang-ticker-text > a:hover {
+    text-decoration: none;
+}
