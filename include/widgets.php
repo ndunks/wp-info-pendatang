@@ -144,7 +144,12 @@ class InfoPendatangTickerWidget extends WP_Widget
             foreach ($rtrw as $rw => &$rts) {
                 $count = 0;
                 foreach ($rts as $rt => $jml) {
-                    $lines[] = sprintf("RT %d/%d: %s Orang", str_pad($rt, 2, '0'), str_pad($rw, 2, '0'), $jml);
+                    if ($rt && $rw) {
+                        $tmp = str_pad($rt, 2, '0', STR_PAD_LEFT) . '/' . str_pad($rw, 2, '0', STR_PAD_LEFT);
+                    } else {
+                        $tmp = '&mdash;';
+                    }
+                    $lines[] = sprintf("RT %s: %s Orang", $tmp, $jml);
                 }
                 unset($rts);
             }

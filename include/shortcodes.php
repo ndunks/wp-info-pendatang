@@ -83,11 +83,15 @@ function info_pendatang_shortcode_rtrw()
                 echo '<tbody>';
                 foreach ($rwlist as $rw => $rtlist) {
                     foreach ($rtlist as $rt => $jml) {
+                        if ($rt && $rw) {
+                            $tmp = 'RT ' . str_pad($rt, 2, '0', STR_PAD_LEFT) . '/' . str_pad($rw, 2, '0', STR_PAD_LEFT);
+                        } else {
+                            $tmp = '&mdash;';
+                        }
                         printf(
-                            '<tr><td>%s</td><td>%s/%s</td><td>%d Orang</td></tr>',
+                            '<tr><td>%s</td><td>%s</td><td>%d Orang</td></tr>',
                             esc_html($dusun),
-                            $rt,
-                            $rw,
+                            $tmp,
                             $jml
                         );
                         $total += $jml;
@@ -105,7 +109,7 @@ function info_pendatang_shortcode_rtrw()
             } ?>
         <tfoot>
             <tr>
-                <th colspan="2">Total</th>
+                <th colspan="2">Total Keseluruhan</th>
                 <th><b><?= $total ?> Orang</b></th>
             </tr>
         </tfoot>
