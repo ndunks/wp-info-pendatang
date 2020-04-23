@@ -55,6 +55,9 @@ function info_pendatang_format_tanggal_indo($tgl)
 function info_pendatang_format_tanggal($tgl)
 {
     // format tgl
+    if (preg_match('/^\d{4}-\d{1,2}-\d{1,2}$/', $tgl)) {
+        return $tgl;
+    }
     $tgl_array = preg_split('#[\/\-\s]+#', $tgl, 3);
     if (count($tgl_array) == 3) {
         $tgl_array = array_map('trim', $tgl_array);
