@@ -218,8 +218,11 @@ function info_pendatang_get_last_update()
     }
 
     $query = "SELECT max(dibuat) as tgl FROM " .  InfoPendatang::$table;
-    $tgl   = InfoPendatang::result('last_update', $wpdb->get_results($query)[0]->tgl);
-    return info_pendatang_format_tanggal_indo($tgl);
+    $tgl   = $wpdb->get_results($query)[0]->tgl;
+    return InfoPendatang::result(
+        'last_update',
+        info_pendatang_format_tanggal_indo($tgl)
+    );
 }
 
 function info_pendatang_get_total()
