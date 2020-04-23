@@ -18,7 +18,7 @@ function info_pendatang_ajax($handle_path, $handle_path_fallback = null)
     }
     $_JSON = [];
     // Parse JSON
-    if (strpos(strtolower($_SERVER['HTTP_CONTENT_TYPE']), 'application/json') !== false) {
+    if (strpos(strtolower(@$_SERVER['HTTP_CONTENT_TYPE']), 'application/json') !== false) {
         $_JSON = json_decode(file_get_contents('php://input'), true);
     }
 
@@ -220,4 +220,17 @@ function info_pendatang_get_last_update()
     $query = "SELECT max(dibuat) as tgl FROM " .  InfoPendatang::$table;
     $tgl   = InfoPendatang::result('last_update', $wpdb->get_results($query)[0]->tgl);
     return info_pendatang_format_tanggal_indo($tgl);
+}
+
+function info_pendatang_get_total()
+{
+    global $wpdb;
+    
+    if (InfoPendatang::has_result('total')) {
+        return InfoPendatang::result('total');
+    } else {
+        $query = "SELECT count(*) as jml FROM " . InfoPendatang::$table;
+        $result = $wpdb->get_results($query);
+        return InfoPendatang::result('total', $result[0]->jml);
+    }
 }

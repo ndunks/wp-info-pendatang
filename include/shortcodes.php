@@ -2,15 +2,7 @@
 
 function info_pendatang_shortcode_total()
 {
-    global $wpdb;
-    
-    if (InfoPendatang::has_result('total')) {
-        return InfoPendatang::result('total');
-    } else {
-        $query = "SELECT count(*) as jml FROM " . InfoPendatang::$table;
-        $result = $wpdb->get_results($query);
-        return InfoPendatang::result('total', $result[0]->jml);
-    }
+    return info_pendatang_get_total();
 }
 
 function info_pendatang_shortcode_last_update()
