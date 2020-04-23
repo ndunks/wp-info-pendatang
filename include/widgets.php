@@ -114,8 +114,10 @@ class InfoPendatangTickerWidget extends WP_Widget
         if ($instance['limit']) {
             $lines = array_slice($lines, 0, $instance['limit']);
         }
-        $lines[] = '<b>Total ' . info_pendatang_get_total() . ' Orang';
-        $lines[] = '<b>Laporan Terakhir ' . info_pendatang_get_last_update();
+        $lines[] = 'Total: <b>' . info_pendatang_get_total() . ' Orang</b>';
+        $lines[] = 'Lap. Terakhir: <b>' . info_pendatang_get_last_update() . '</b>';
+        $contact = 'WA <b>' . InfoPendatang::$config['no_wa'] . '</b>';
+        $lines[] = $contact;
         echo $args['before_widget'];
         echo '<div class="info-pendatang-ticker-text">';
         printf('<a class="link" href="%s">', esc_attr($instance['link']));
