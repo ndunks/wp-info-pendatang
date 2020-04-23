@@ -3,7 +3,7 @@
  * Plugin Name: Info Pendatang
  * Plugin URI: https://klampok.id/
  * Description: Mendata dan menampilkan informasi pendatang di desa anda
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Mochamad Arifin
  * Author URI: http://klampok.id/
  */
@@ -15,7 +15,7 @@ class InfoPendatang
 {
     public static $title	= 'Info Pendatang';
     public static $name		= 'info_pendatang';
-    public static $version	= '1.0.0';
+    public static $version	= '1.0.1';
     public static $me		= false;
     public static $config	= null;
     public static $table	= null;
