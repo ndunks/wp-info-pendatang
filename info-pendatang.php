@@ -87,6 +87,7 @@ class InfoPendatang
     public function init_widget()
     {
         register_widget('InfoPendatangWidget');
+        register_widget('InfoPendatangTickerWidget');
     }
 
     public function javascripts()
