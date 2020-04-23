@@ -31,6 +31,10 @@
         <td>Menampikan jumlah last_update pendatang</td>
     </tr>
 </table>
+<div style="text-align: center">
+<a href="<?= admin_url("admin-ajax.php?action=" . InfoPendatang::$name . "&do=export") ?>"
+    class="button-primary">Download Data</a>
+</div>
 <hr />
 
 <?php
