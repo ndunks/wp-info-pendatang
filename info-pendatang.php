@@ -46,24 +46,10 @@ class InfoPendatang
         $saved_config = get_option(self::$name);
         if (!empty($saved_config) && is_array($saved_config)) {
             self::$config	= $saved_config;
-        } else {
-            //Default config
-            self::$config	= [
-                'secret'=> uniqid() . uniqid(),
-                'version' => self::$version,
-                'dusun' => [
-                    [
-                        'no' => 1,
-                        'nama' => 'Dusun 1',
-                        'rw' => [1,2,3]
-                    ],
-                    [
-                        'no' => 2,
-                        'nama' => 'Dusun 2',
-                        'rw' => [4,5,6]
-                    ],
-                ]
-            ];
+        }
+        
+        if (empty(self::$config) || self::$config['version'] != self::$version) {
+            include INFO_PENDATANG_DIR . 'include/upgrade.php';
         }
     }
 
