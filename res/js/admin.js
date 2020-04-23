@@ -5,7 +5,7 @@
       var sumber_maps = {
         'API_WA': 'WhatsApp',
         'WEB_ADMIN': 'Input Web Admin',
-        'WEB_PUBLIK': 'Input Web Warga'
+        'WEB_PUBLIK': 'Input Web Publik'
       }
 
       me.dialog({

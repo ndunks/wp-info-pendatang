@@ -10,6 +10,12 @@ $table_cols = [
     'Nama','Nik','Umur','RT/RW','No HP','Asal Kota',
     'Tgl Kepulangan','Keluhan','Keterangan','Pelapor','Sumber','Dilaporkan'
 ];
+
+$sumber = [
+    'API_WA' => 'WhatsApp',
+    'WEB_ADMIN' => 'Input Web Admin',
+    'WEB_PUBLIK' => 'Input Web Publik'
+];
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -29,6 +35,7 @@ $table_cols = [
             if ($row->pelapor && strpos($row->pelapor, '@c.us')) {
                 $row->pelapor = str_replace('@c.us', '', $row->pelapor);
             }
+            $row->sumber = @$sumber[$row->sumber];
             unset($val);
             echo '<tr><td>' . implode('</td><td>', (array) $row). '</td></tr>';
         }

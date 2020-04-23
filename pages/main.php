@@ -160,6 +160,12 @@ $result  = info_pendatang_list(null, $_GET['page']);
                 <textarea name="keterangan" class="regular-text"></textarea>
             </td>
         </tr>
+        <tr>
+            <td colspan="3">
+                <label>Raw: </label><br />
+                <textarea name="raw" class="regular-text"></textarea>
+            </td>
+        </tr>
     </table>
     <div>
         <button id="info-pendatang-dialog-delete-button" class="button-secondary"> (!) HAPUS </button>
