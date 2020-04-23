@@ -25,8 +25,7 @@ class InfoPendatangAdmin
         if (@$_GET['page'] != InfoPendatang::$name) {
             return;
         }
-        wp_enqueue_script('jquery-ui-dialog');
-        wp_enqueue_script(InfoPendatang::$name);
+        wp_enqueue_script('info-pendatang-admin');
     }
 
     public function stylesheets()
@@ -34,8 +33,7 @@ class InfoPendatangAdmin
         if (@$_GET['page'] != InfoPendatang::$name) {
             return;
         }
-        wp_enqueue_style('wp-jquery-ui-dialog');
-        wp_enqueue_style(InfoPendatang::$name);
+        wp_enqueue_style('info-pendatang-admin');
     }
 
     public function menu()
