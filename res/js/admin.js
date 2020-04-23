@@ -92,6 +92,14 @@
         me.dialog('open');
       });
     },
+    '#info_pendatang_settings_no_wa_button': function (id, me) {
+      me.click(function () {
+        $.post(ajaxurl + '?action=info_pendatang&do=config', {
+          'update': 'no_wa',
+          'value': $('#info_pendatang_settings_no_wa').val()
+        }, function () { alert('No wa disimpan') })
+      })
+    },
     '#info_pendatang_settings_dusun': function (id, me) {
       console.log(dusuns);
       function add_dusun(data) {

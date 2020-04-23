@@ -3,8 +3,8 @@
     <legend>
         <h3>Nomor WA</h3>
     </legend>
-    <input class="regular-text" type="text" name="no_wa" value="<?= esc_attr(InfoPendatang::$config['no_wa']) ?>"/>
-    <button id="info_pendatang_settings_no_wa" class="button-primary">Ubah No WA</button>
+    <input id="info_pendatang_settings_no_wa" class="regular-text" type="text" name="no_wa" value="<?= esc_attr(InfoPendatang::$config['no_wa']) ?>"/>
+    <button id="info_pendatang_settings_no_wa_button" class="button-primary">Ubah No WA</button>
     <div class="clear">&nbsp;</div>
 </fieldset>
 <fieldset>
