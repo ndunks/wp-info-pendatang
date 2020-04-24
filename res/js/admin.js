@@ -70,9 +70,11 @@
         });
       })
       // bind a button or a link to open the dialog
-      $('.info-pendatang-dialog-button').click(function (e) {
+      $('.info-pendatang-click-row').click(function (e) {
         e.preventDefault();
-        data = jQuery(this).parent().parent().data('json');
+
+        data = $(this).data('json');
+
 
         // info pendatang apply values
         me.find('[name]').each(function () {
@@ -80,18 +82,16 @@
           var name = el.attr('name');
           el.val(data[name]);
         })
-        if ( parseInt(data['verified']) ) {
+        if (parseInt(data['verified'])) {
           $('#info-pendatang-verified-button').hide();
+          $('#info-pendatang-verified').html('<span style="color:green">Sudah di Verifikasi</span>');
         } else {
           $('#info-pendatang-verified-button').show();
+          $('#info-pendatang-verified').html('<span style="color:red">Belum di Verifikasi </span>');
         }
         $('#info-pendatang-sumber').text(sumber_maps[data.sumber] || data.sumber);
         $('#info-pendatang-pelapor').text(data.pelapor || '(Tdk Tahu)');
-        if (data.verified) {
-          $('#info-pendatang-verified').html('<b style="color:red">Belum di Verifikasi </b>');
-        } else {
-          $('#info-pendatang-verified').html('<b style="color:green">Sudah di Verifikasi</b>');
-        }
+        $('#info-pendatang-waktu').text(data.dibuat.replace(/^(\d+)-(\d+)-(\d+)\s(.*)$/, '$3/$2/$1 $4'));
 
         me.dialog('open');
       });

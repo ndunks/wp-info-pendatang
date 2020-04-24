@@ -90,21 +90,6 @@ function info_pendatang_format_tanggal($tgl)
     return false;
 }
 
-function info_pendatang_list($filter = null, $page = 1, $per_page = 20)
-{
-    global $wpdb;
-    $page = intval($page);
-    if ($page < 1) {
-        $page = 1;
-    }
-
-    $start = ($page - 1) *  $per_page;
-    $query = "SELECT * FROM " . InfoPendatang::$table .
-            " ORDER BY dibuat DESC LIMIT $start, $per_page ";
-    $result= $wpdb->get_results($query);
-    return $result;
-}
-
 function info_pendatang_sanitize_data(&$dirty, $allowOtherCols = null)
 {
     $cols = ['nama', 'nik', 'umur', 'rt', 'rw', 'dusun', 'asal_kota',
@@ -273,4 +258,10 @@ function info_pendatang_send_wa($no, $msg)
     } else {
         throw new Exception("Response: $code $res", 500);
     }
+}
+
+function info_pendatang_format_date_indo($date)
+{
+    $date = new DateTime($date);
+    return $date->format('d/m/Y H:i:s');
 }

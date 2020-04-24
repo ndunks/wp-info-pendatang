@@ -1,4 +1,30 @@
 <h1>Pengaturan</h1>
+<p>Anda dapat menyisipkan data info pendatang pada halaman ataupun postingan dengan mengetikan kode
+    (shortcode) berikut:
+</p>
+<table>
+    <tr>
+        <td><code>[info_pendatang]</code></td>
+        <td>Menampikan ringkasan pendatang (per dusun)</td>
+    </tr>
+    <tr>
+        <td><code>[info_pendatang rtrw]</code></td>
+        <td>Menampikan info pendatang per-rt/rw</td>
+    </tr>
+    <tr>
+        <td><code>[info_pendatang asal_kota]</code></td>
+        <td>Menampikan info pendatang berdasarkan asal kota</td>
+    </tr>
+    <tr>
+        <td><code>[info_pendatang total]</code></td>
+        <td>Menampikan jumlah total pendatang</td>
+    </tr>
+    <tr>
+        <td><code>[info_pendatang last_update]</code></td>
+        <td>Menampikan jumlah last_update pendatang</td>
+    </tr>
+</table>
+<hr/>
 <fieldset>
     <legend>
         <h3>Nomor WA</h3>

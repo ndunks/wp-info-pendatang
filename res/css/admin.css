@@ -11,3 +11,15 @@
     margin: 10px;
     border: solid 1px #e2e2e2;
 }
+
+.info-pendatang-click-row{
+    cursor: pointer;
+}
+
+.info-pendatang-click-row:hover{
+    background-color: white;
+}
+
+#info-pendatang-dialog {
+    padding-top: 0px;
+}

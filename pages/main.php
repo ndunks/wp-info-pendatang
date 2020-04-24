@@ -1,4 +1,19 @@
-<div style="float: right; padding: 10px;">
+<?php
+global $wpdb;
+$per_page  = 20;
+$page = intval(@$_GET['page_no']);
+
+if ($page < 1) {
+    $page = 1;
+}
+
+$start = ($page - 1) *  $per_page;
+$total = $wpdb->get_var("SELECT COUNT(*) FROM " . InfoPendatang::$table);
+$total_page = ceil($total / $per_page);
+$query = "SELECT * FROM " . InfoPendatang::$table .
+        " ORDER BY dibuat DESC LIMIT $start, $per_page ";
+$result= $wpdb->get_results($query);
+?><div style="float: right; padding: 10px;">
     <a href="<?= admin_url('admin.php?page=' . InfoPendatang::$name . '&view=settings') ?>"
         class="button-primary info_pendatang_button">
         <span class="dashicons dashicons-admin-settings"></span>
@@ -10,55 +25,45 @@
         <span>Kirim WA</span>
     </a>
 </div>
-<h1>Info Pendatang</h1>
-<p>Anda dapat menyisipkan data info pendatang pada halaman ataupun postingan dengan mengetikan kode
-    (shortcode) berikut:
-</p>
-<table>
-    <tr>
-        <td><code>[info_pendatang]</code></td>
-        <td>Menampikan ringkasan pendatang (per dusun)</td>
-    </tr>
-    <tr>
-        <td><code>[info_pendatang rtrw]</code></td>
-        <td>Menampikan info pendatang per-rt/rw</td>
-    </tr>
-    <tr>
-        <td><code>[info_pendatang asal_kota]</code></td>
-        <td>Menampikan info pendatang berdasarkan asal kota</td>
-    </tr>
-    <tr>
-        <td><code>[info_pendatang total]</code></td>
-        <td>Menampikan jumlah total pendatang</td>
-    </tr>
-    <tr>
-        <td><code>[info_pendatang last_update]</code></td>
-        <td>Menampikan jumlah last_update pendatang</td>
-    </tr>
-</table>
-<div style="text-align: center">
-<a href="<?= admin_url("admin-ajax.php?action=" . InfoPendatang::$name . "&do=export") ?>"
-    class="button-primary">Download Data</a>
+
+<div style="text-align: center" class="clear">
+    <h1>Laporan Pendatang Total <?= $total ?></h1>
 </div>
 <hr />
+<div class="tablenav">
+    <div style="float: left">
+    <a href="<?= admin_url("admin-ajax.php?action=" . InfoPendatang::$name . "&do=export") ?>"
+        class="button-primary">Download Data</a>
+    </div>
+	<div class="tablenav-pages">
+        <?php if ($page > 1): ?>
+        <a class='prev-page' title='Halaman sebelumnya'
+        href='<?= admin_url('admin.php?page=' . InfoPendatang::$name . '&page_no=' . ($page - 1)) ?>'>&lsaquo;</a>
+        <?php endif ?>
+		<span class="paging-input">
+            Halaman <?= $page ?> dari <span class='total-pages'><?= $total_page ?></span>
+        </span>
+        <?php if ($page < $total_page): ?>
+        <a class='next-page' title='Halaman selanjutnya'
+        href='<?= admin_url('admin.php?page=' . InfoPendatang::$name . '&page_no=' . ($page + 1)) ?>'>&rsaquo;</a>
+        <?php endif ?>
+	</div>
+</div>
 
-<?php
-$result  = info_pendatang_list(null, $_GET['page']);
-?>
 <table class="widefat fixed" cellspacing="0">
     <thead>
         <tr>
             <th class="manage-column column-nama" scope="col">Nama</th>
             <th class="manage-column column-alamat" scope="col">Alamat</th>
             <th class="manage-column column-asal-kota" scope="col">Asal Kota</th>
-            <th class="manage-column column-tgl-kepulangan" scope="col">Tgl. Kedatangan</th>
+            <th class="manage-column column-tgl-kepulangan" scope="col">Kedatangan</th>
             <th class="manage-column column-verified" scope="col">Verified</th>
-            <th class="manage-column column-aksi" scope="col">Aksi</th>
+            <th class="manage-column column-dibuat" scope="col">Laporan</th>
         </tr>
     </thead>
     <tbody>
         <?php foreach ($result as $row): ?>
-        <tr class="alternate" data-json="<?= esc_attr(json_encode($row)) ?>">
+        <tr  class="alternate info-pendatang-click-row" data-json="<?= esc_attr(json_encode($row)) ?>">
             <td class="column-nama">
                 <?= esc_html($row->nama) ?: '&mdash;' ?>
             </td>
@@ -82,8 +87,8 @@ $result  = info_pendatang_list(null, $_GET['page']);
             <td class="column-tgl-verified">
                 <?= $row->verified ? '<span style="color:green">Sudah</span>' : '<span style="color:red">Belum</span>' ?>
             </td>
-            <td class="column-aksi">
-                <button class="button-primary info-pendatang-dialog-button"> Detail </button>
+            <td class="column-dibuat">
+                <?= info_pendatang_format_date_indo($row->dibuat) ?>
             </td>
         </tr>
         <?php endforeach; ?>
@@ -95,9 +100,12 @@ $result  = info_pendatang_list(null, $_GET['page']);
     <table class="form-table">
         <tr>
             <td colspan="3">
-                Sumber: <strong id="info-pendatang-sumber"></strong>,
-                Pelapor:<strong id="info-pendatang-pelapor"></strong>,
-                Status: <strong id="info-pendatang-verified"></strong><br />
+                <small>
+                    Sumber: <strong id="info-pendatang-sumber"></strong><br/>
+                    Pelapor:<strong id="info-pendatang-pelapor"></strong><br/>
+                    Waktu:<strong id="info-pendatang-waktu"></strong><br/>
+                    Status: <strong id="info-pendatang-verified"></strong><br />
+                </small>
                 <span id="info-pendatang-verified-button">
                     <button class="button-primary">Klik untuk Verifikasi</button>
                 </span>
@@ -167,8 +175,8 @@ $result  = info_pendatang_list(null, $_GET['page']);
         </tr>
         <tr>
             <td colspan="3">
-                <label>Raw: </label><br />
-                <textarea name="raw" class="regular-text"></textarea>
+                <label>Isi Pesan WA: </label><br />
+                <textarea style="height:180px" name="raw" class="regular-text"></textarea>
             </td>
         </tr>
     </table>

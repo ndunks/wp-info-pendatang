@@ -35,6 +35,8 @@
     }
 
     $(document).ready(function () {
-        marquee($('.info-pendatang-ticker-text'), $('.info-pendatang-ticker-text a'));
+        if ($('.info-pendatang-ticker-text').length) {
+            marquee($('.info-pendatang-ticker-text'), $('.info-pendatang-ticker-text a'));
+        }
     })
 })(jQuery);
