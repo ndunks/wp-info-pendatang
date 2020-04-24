@@ -240,3 +240,35 @@ function info_pendatang_get_total()
         return InfoPendatang::result('total', $result[0]->jml);
     }
 }
+
+function info_pendatang_send_wa($no, $msg)
+{
+    $wa_server = InfoPendatang::$config['wa_server'];
+    $wa_secret = InfoPendatang::$config['wa_secret'];
+
+    $query = [
+        'p' => $wa_secret,
+        'no' => $no,
+        'msg' => $msg
+    ];
+
+    $url = rtrim($wa_server, '\/\\?') . '/send?' . http_build_query($query);
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYSTATUS, false);
+    $res = curl_exec($ch);
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    curl_close($ch);
+
+    if (!$code) {
+        throw new Exception('Koneksi ke ' . $wa_server . ' gagal', 500);
+    } elseif ($code == 200) {
+        return true;
+    } elseif ($code == 403) {
+        throw new Exception("Response: $code Secret salah", 500);
+    } else {
+        throw new Exception("Response: $code $res", 500);
+    }
+}

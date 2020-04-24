@@ -9,6 +9,14 @@
 </fieldset>
 <fieldset>
     <legend>
+        <h3>Pesan Himbauan</h3>
+    </legend>
+    <textarea id="info_pendatang_settings_himbauan" class="regular-text" name="msg_himbauan"><?= esc_html(@InfoPendatang::$config['msg_himbauan']) ?></textarea><br/>
+    <button id="info_pendatang_settings_himbauan_button" class="button-primary">Ubah Himbauan</button>
+    <div class="clear">&nbsp;</div>
+</fieldset>
+<fieldset>
+    <legend>
         <h3>Daftar Dusun</h3>
     </legend>
     <div id="info_pendatang_settings_dusun">
@@ -22,6 +30,18 @@
 </fieldset>
 
 <hr />
+<fieldset id="info_pendatang_settings_wa_server">
+    <legend>
+        <h3>WA Server</h3>
+    </legend>
+    <label>URL</label><br />
+    <input name="wa_server" type="text" class="regular-text" value="<?=  esc_attr(InfoPendatang::$config['wa_server']) ?>" /><br />
+    <label>Secret</label><br />
+    <input name="wa_secret" type="text" class="large-text" value="<?=  esc_attr(InfoPendatang::$config['wa_secret']) ?>" /><br/>
+    <button id="info_pendatang_settings_wa_server_button" class="button-primary">Ubah Server WA</button>
+    <button id="info_pendatang_settings_wa_server_test_button" class="button-secondary">Test</button>
+    <div class="clear">&nbsp;</div>
+</fieldset>
 <fieldset>
     <legend>
         <h3>API Secret</h3>

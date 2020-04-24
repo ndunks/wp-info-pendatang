@@ -17,7 +17,13 @@ function info_pendatang_default_config()
                 'nama' => 'Dusun 2',
                 'rw' => [4,5,6]
             ],
-        ]
+        ],
+        'wa_server' => '',
+        'wa_secret' => '',
+        'msg_himbauan' => 'Selamat siang...Sdr. %nama% kami menghimbau selama pulang berada dirumah agar anda mengisolasi diri dirumah , tidak pergi atau berkumpul dikeramaian, menjaga kebersihan diri dengan pembiasaan hidup bersih dan sehat, apabila terdapat keluhan batuk,demam, atau sesak nafas segera periksa ke puskesmas terdekat.. Mohon untuk menjadi perhatian.
+Salam Sehat
+#SATGAS COVID 19 DESA KLAMPOK
+http://klampok.id'
     ];
 }
 

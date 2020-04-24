@@ -80,7 +80,11 @@
           var name = el.attr('name');
           el.val(data[name]);
         })
-
+        if ( parseInt(data['verified']) ) {
+          $('#info-pendatang-verified-button').hide();
+        } else {
+          $('#info-pendatang-verified-button').show();
+        }
         $('#info-pendatang-sumber').text(sumber_maps[data.sumber] || data.sumber);
         $('#info-pendatang-pelapor').text(data.pelapor || '(Tdk Tahu)');
         if (data.verified) {
@@ -92,12 +96,64 @@
         me.dialog('open');
       });
     },
+    '#info_pendatang_settings_wa_server_button': function (id, me) {
+      me.click(function () {
+        var data = {
+          'update': 'bulk'
+        }
+        $('#info_pendatang_settings_wa_server')
+          .find('[name]').each(function () {
+            var el = $(this);
+            data[el.attr('name')] = el.val();
+          })
+        $.post(ajaxurl + '?action=info_pendatang&do=config', data, function (res) {
+          alert(res);
+        })
+      })
+    },
+    '#info_pendatang_settings_wa_server_test_button': function (id, me) {
+      me.click(function () {
+        var data = {}
+        $('#info_pendatang_settings_wa_server')
+          .find('[name]').each(function () {
+            var el = $(this);
+            data[el.attr('name')] = el.val();
+          })
+        $.post(ajaxurl + '?action=info_pendatang&do=wa_server_test', data, function (res) {
+          alert(res);
+        })
+      })
+    },
     '#info_pendatang_settings_no_wa_button': function (id, me) {
       me.click(function () {
         $.post(ajaxurl + '?action=info_pendatang&do=config', {
           'update': 'no_wa',
           'value': $('#info_pendatang_settings_no_wa').val()
         }, function () { alert('No wa disimpan') })
+      })
+    },
+    '#info_pendatang_settings_himbauan_button': function (id, me) {
+      me.click(function () {
+        $.post(ajaxurl + '?action=info_pendatang&do=config', {
+          'update': 'msg_himbauan',
+          'value': $('#info_pendatang_settings_himbauan').val()
+        }, function () { alert('Himbauan disimpan') })
+      })
+    },
+    '#info_pendatang_send_wa_button': function (id, me) {
+      me.click(function () {
+        me.attr('disabled', 1);
+        var data = {}
+        $('#info_pendatang_send_wa')
+          .find('[name]').each(function () {
+            var el = $(this);
+            data[el.attr('name')] = el.val();
+          })
+        $.post(ajaxurl + '?action=info_pendatang&do=send_wa', data, function (response) {
+          me.removeAttr('disabled');
+          console.log(response);
+          alert(response);
+        })
       })
     },
     '#info_pendatang_settings_dusun': function (id, me) {
@@ -120,7 +176,6 @@
         var data = {
           no: dusuns.reduce(function (c, v) { return v.no > c ? v.no : c }, 1) + 1
         }
-        console.log(data)
         dusuns.push(data);
         add_dusun(data);
       })

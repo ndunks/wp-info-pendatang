@@ -4,6 +4,11 @@
         <span class="dashicons dashicons-admin-settings"></span>
         <span>Pengaturan</span>
     </a>
+    <a href="<?= admin_url('admin.php?page=' . InfoPendatang::$name . '&view=send_wa') ?>"
+        class="button-primary info_pendatang_button">
+        <span class="dashicons dashicons-email"></span>
+        <span>Kirim WA</span>
+    </a>
 </div>
 <h1>Info Pendatang</h1>
 <p>Anda dapat menyisipkan data info pendatang pada halaman ataupun postingan dengan mengetikan kode
