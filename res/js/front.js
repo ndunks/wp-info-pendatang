@@ -1,8 +1,9 @@
 (function ($) {
     function marquee(a, b) {
-        var width = b.width();
-        var start_pos = a.width();
+        var width = $(b).width();
+        var start_pos = $(a).width();
         var end_pos = -width;
+        console.log(start_pos, end_pos, width);
         var timer = 0;
         var left = 0;
 
@@ -12,27 +13,24 @@
                 if (left < end_pos) {
                     left = start_pos;
                 }
-                b.css('left', --left);
+                b.style.left = --left + "px"
             }, 10);
         }
-
-        b.css({
-            'width': width,
-            'left': left
-        });
+        b.style.width = width + "px"
+        b.style.left = left + "px"
         scroll();
-        b.mouseenter(function () {
+        a.onmouseenter = function () {
             clearInterval(timer);
             timer = 0;
-        });
-        b.mouseleave(function () {
+        };
+        a.onmouseleave = function () {
             scroll()
-        });
+        };
     }
 
     $(document).ready(function () {
         if ($('.info-pendatang-ticker-text').length) {
-            marquee($('.info-pendatang-ticker-text'), $('.info-pendatang-ticker-text a'));
+            marquee($('.info-pendatang-ticker-text')[0], $('.info-pendatang-ticker-text a')[0]);
         }
     })
 })(jQuery);
