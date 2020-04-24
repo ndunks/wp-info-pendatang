@@ -120,7 +120,7 @@ class InfoPendatangTickerWidget extends WP_Widget
         $lines[] = $contact;
         echo $args['before_widget'];
         echo '<div class="info-pendatang-ticker-text">';
-        echo '<marquee behavior="scroll" scrollamount="10">';
+        echo '<marquee behavior="scroll">';
         printf('<a style="color:white" href="%s">', esc_attr($instance['link']));
         if (! empty($title)) {
             echo "<b>$title : </b>";
