@@ -1,5 +1,5 @@
 <?php
-$cols = "nama,nik,umur,CONCAT(rt,'/',rw) as rtrw,no_hp,asal_kota,tgl_kepulangan,keluhan,keterangan,pelapor,sumber,dibuat";
+$cols = "nama,nik,umur,CONCAT(rt,'/',rw) as rtrw,no_hp,asal_kota,tgl_kepulangan,keluhan,keterangan,pelapor,sumber,verified,dibuat";
 $results = $wpdb->get_results("SELECT $cols FROM " . InfoPendatang::$table . " ORDER BY id");
 $total = info_pendatang_get_total();
 $date = date('d-M-Y H i s');
@@ -8,7 +8,7 @@ header('Content-Type: application/vnd.ms-excel');
 header('Content-Disposition: attachment; filename="'.$title.'.xls"');
 $table_cols = [
     'Nama','Nik','Umur','RT/RW','No HP','Asal Kota',
-    'Tgl Kepulangan','Keluhan','Keterangan','Pelapor','Sumber','Dilaporkan'
+    'Tgl Kepulangan','Keluhan','Keterangan','Pelapor','Sumber','Verified','Dilaporkan'
 ];
 
 $sumber = [
@@ -25,6 +25,8 @@ $sumber = [
     <style type="text/css">
     td { mso-number-format:"\@"; }
     table{ border-collapse: collapse;}
+    .red: {color: red};
+    .green: {color: green};
     </style>
 </head>
 <body>
@@ -36,11 +38,12 @@ $sumber = [
                 $row->pelapor = str_replace('@c.us', '', $row->pelapor);
             }
             $row->sumber = @$sumber[$row->sumber];
+            $row->verified = $row->verified ? '<span class="green">Sudah</span>' : '<span class="red">Belum</span>';
             unset($val);
             echo '<tr><td>' . implode('</td><td>', (array) $row). '</td></tr>';
         }
         ?>
-        <tr><th colspan="<?= count($table_cols) - 1 ?>"><?= "TOTAL $total Orang" ?></th></tr>
+        <tr><th colspan="<?= count($table_cols) ?>"><?= "TOTAL $total Orang" ?></th></tr>
     </table>
 </body>
 </html>
