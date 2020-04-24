@@ -6,11 +6,14 @@ $page = intval(@$_GET['page_no']);
 if ($page < 1) {
     $page = 1;
 }
+$where = isset($_GET['q']) ?
+"WHERE nama like '%" . esc_sql(stripslashes($_GET['q'])) . "%'" :
+'';
 
 $start = ($page - 1) *  $per_page;
-$total = $wpdb->get_var("SELECT COUNT(*) FROM " . InfoPendatang::$table);
+$total = $wpdb->get_var("SELECT COUNT(*) FROM " . InfoPendatang::$table . " $where");
 $total_page = ceil($total / $per_page);
-$query = "SELECT * FROM " . InfoPendatang::$table .
+$query = "SELECT * FROM " . InfoPendatang::$table . " $where " .
         " ORDER BY dibuat DESC LIMIT $start, $per_page ";
 $result= $wpdb->get_results($query);
 ?><div style="float: right; padding: 10px;">
@@ -24,6 +27,11 @@ $result= $wpdb->get_results($query);
         <span class="dashicons dashicons-email"></span>
         <span>Kirim WA</span>
     </a>
+    <a href="<?= admin_url("admin-ajax.php?action=" . InfoPendatang::$name . "&do=export") ?>"
+        class="button-primary info_pendatang_button">
+        <span class="dashicons dashicons-download"></span>
+        <span>Unduh</span>
+    </a>
 </div>
 
 <div style="text-align: center" class="clear">
@@ -31,10 +39,11 @@ $result= $wpdb->get_results($query);
 </div>
 <hr />
 <div class="tablenav">
-    <div style="float: left">
-    <a href="<?= admin_url("admin-ajax.php?action=" . InfoPendatang::$name . "&do=export") ?>"
-        class="button-primary">Download Data</a>
-    </div>
+    <form style="float: left" class="info-pendatang-search-box">
+        <input type="hidden" name="page" value="<?= InfoPendatang::$name ?>"/>
+        <input placeholder="Cari nama" type="text" class="medium-text" name="q" value="<?= esc_attr(@$_GET['q']) ?>"/>
+        <button type="submit" class="button-secondary">Cari</button>
+    </form>
 	<div class="tablenav-pages">
         <?php if ($page > 1): ?>
         <a class='prev-page button-primary' title='Halaman sebelumnya'
@@ -47,7 +56,7 @@ $result= $wpdb->get_results($query);
         <a class='next-page button-primary' title='Halaman selanjutnya'
         href='<?= admin_url('admin.php?page=' . InfoPendatang::$name . '&page_no=' . ($page + 1)) ?>'>&rsaquo;</a>
         <?php endif ?>
-	</div>
+    </div>
 </div>
 
 <table class="widefat fixed" cellspacing="0">
