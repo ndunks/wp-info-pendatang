@@ -7,7 +7,6 @@ class InfoPendatangAdmin
     {
         self::$me	=& $this;
         add_action('admin_menu', array($this, 'menu'));
-        add_action('admin_bar_menu', array($this, 'admin_bar_menu'), 90);
         add_action('admin_print_scripts', array($this, 'javascripts'));
         add_action('admin_print_styles', array($this, 'stylesheets'));
         register_activation_hook(INFO_PENDATANG_DIR . 'info-pendatang.php', array($this, 'activate'));
@@ -40,16 +39,7 @@ class InfoPendatangAdmin
     {
         add_menu_page('Info Pendatang', 'Info Pendatang', 'publish_posts', InfoPendatang::$name, array($this, 'main'), 'dashicons-groups', 10);
     }
-    
-    public function admin_bar_menu($wp_admin_bar)
-    {
-        $args = array(
-            'id' => 'info-pendatang-button',
-            'title' => '<span>Info Pendatang</span>',
-            'href' => get_admin_url(get_current_blog_id(), 'admin.php?page=' . InfoPendatang::$name)
-        );
-        $wp_admin_bar->add_menu($args);
-    }
+
     
     //View Router
     public function main()

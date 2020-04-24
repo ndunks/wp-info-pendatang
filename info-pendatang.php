@@ -27,6 +27,7 @@ class InfoPendatang
 
         self::$me	=& $this;
         add_action('init', array($this, 'init'));
+        add_action('admin_bar_menu', array($this, 'admin_bar_menu'), 140);
         /** No Priv only will fail when loggedin */
         add_action('wp_ajax_nopriv_info_pendatang', array($this, 'ajax'));
         add_action('wp_print_scripts', array($this, 'javascripts'));
@@ -68,6 +69,20 @@ class InfoPendatang
         wp_register_style('info-pendatang-front', INFO_PENDATANG_URL . 'res/css/front.css', [], self::$version);
         wp_register_script('info-pendatang-admin', INFO_PENDATANG_URL . 'res/js/admin.js', ['jquery-ui-dialog'], self::$version);
         wp_register_style('info-pendatang-admin', INFO_PENDATANG_URL . 'res/css/admin.css', ['info-pendatang-front','wp-jquery-ui-dialog'], self::$version);
+    }
+    
+    public function admin_bar_menu($wp_admin_bar)
+    {
+        $args = array(
+            'id' => 'info-pendatang-button',
+            'title' => 'Info Pendatang',
+            'href' => get_admin_url(get_current_blog_id(), 'admin.php?page=' . InfoPendatang::$name)
+        );
+        $wp_admin_bar->add_menu($args);
+        $wp_admin_bar->remove_node('wp-logo');
+        $wp_admin_bar->remove_node('updates');
+        $wp_admin_bar->remove_node('comments');
+        $wp_admin_bar->remove_node('wpfc-toolbar-parent');
     }
 
     public function init_widget()
