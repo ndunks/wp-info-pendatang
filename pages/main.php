@@ -38,73 +38,90 @@ $result= $wpdb->get_results($query);
     <h1>Laporan Pendatang Total <?= $total ?></h1>
 </div>
 <hr />
-<div class="tablenav">
-    <form style="float: left" class="info-pendatang-search-box">
-        <input type="hidden" name="page" value="<?= InfoPendatang::$name ?>"/>
-        <input placeholder="Cari nama" type="text" class="medium-text" name="q" value="<?= esc_attr(@$_GET['q']) ?>"/>
-        <button type="submit" class="button-secondary">Cari</button>
-    </form>
-	<div class="tablenav-pages">
-        <?php if ($page > 1): ?>
-        <a class='prev-page button-primary' title='Halaman sebelumnya'
-        href='<?= admin_url('admin.php?page=' . InfoPendatang::$name . '&page_no=' . ($page - 1)) ?>'>&lsaquo;</a>
-        <?php endif ?>
-		<span class="paging-input">
-            Halaman <?= $page ?> dari <span class='total-pages'><?= $total_page ?></span>
-        </span>
-        <?php if ($page < $total_page): ?>
-        <a class='next-page button-primary' title='Halaman selanjutnya'
-        href='<?= admin_url('admin.php?page=' . InfoPendatang::$name . '&page_no=' . ($page + 1)) ?>'>&rsaquo;</a>
-        <?php endif ?>
+<div style="margin-right: 10px">
+    <div class="tablenav">
+        <form style="float: left" class="info-pendatang-search-box">
+            <input type="hidden" name="page" value="<?= InfoPendatang::$name ?>"/>
+            <input placeholder="Cari nama" type="text" class="medium-text" name="q" value="<?= esc_attr(@$_GET['q']) ?>"/>
+            <button type="submit" class="button-secondary">Cari</button>
+        </form>
+        <div class="tablenav-pages">
+            <?php if ($page > 1): ?>
+            <a class='prev-page button-primary' title='Halaman sebelumnya'
+            href='<?= admin_url('admin.php?page=' . InfoPendatang::$name . '&page_no=' . ($page - 1)) ?>'>&lsaquo;</a>
+            <?php endif ?>
+            <span class="paging-input">
+                Halaman <?= $page ?> dari <span class='total-pages'><?= $total_page ?></span>
+            </span>
+            <?php if ($page < $total_page): ?>
+            <a class='next-page button-primary' title='Halaman selanjutnya'
+            href='<?= admin_url('admin.php?page=' . InfoPendatang::$name . '&page_no=' . ($page + 1)) ?>'>&rsaquo;</a>
+            <?php endif ?>
+        </div>
     </div>
+
+    <table class="widefat fixed" cellspacing="0">
+        <thead>
+            <tr>
+                <th class="manage-column column-nama" scope="col">Nama</th>
+                <th class="manage-column column-alamat" scope="col">Alamat</th>
+                <th class="manage-column column-asal-kota" scope="col">Asal Kota</th>
+                <th class="manage-column column-tgl-kepulangan" scope="col">Kedatangan</th>
+                <th class="manage-column column-verified" scope="col">Verified</th>
+                <th class="manage-column column-dibuat" scope="col">Laporan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($result as $row): ?>
+            <tr  class="alternate info-pendatang-click-row" data-json="<?= esc_attr(json_encode($row)) ?>">
+                <td class="column-nama">
+                    <?= esc_html($row->nama) ?: '&mdash;' ?>
+                </td>
+                <td class="column-alamat">
+                    <?php
+                    $txt = "";
+                    if ($row->rt || $row->rw) {
+                        $txt = "{$row->rt}/{$row->rw}";
+                    }
+                    if ($row->dusun) {
+                        $txt .= " ({$row->dusun})";
+                    }
+                    echo $txt ? esc_html($txt) : '&mdash;' ?>
+                </td>
+                <td class="column-asal-kota">
+                    <?= esc_html($row->asal_kota) ?: '&mdash;' ?>
+                </td>
+                <td class="column-tgl-kepulangan">
+                    <?= esc_html($row->tgl_kepulangan) ?: '&mdash;' ?>
+                </td>
+                <td class="column-tgl-verified">
+                    <?= $row->verified ? '<span style="color:green">Sudah</span>' : '<span style="color:red">Belum</span>' ?>
+                </td>
+                <td class="column-dibuat">
+                    <?= info_pendatang_format_date_indo($row->dibuat) ?>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+
+        </tbody>
+    </table>
+    <div class="tablenav">
+        <div class="tablenav-pages">
+            <?php if ($page > 1): ?>
+            <a class='prev-page button-primary' title='Halaman sebelumnya'
+            href='<?= admin_url('admin.php?page=' . InfoPendatang::$name . '&page_no=' . ($page - 1)) ?>'>&lsaquo;</a>
+            <?php endif ?>
+            <span class="paging-input">
+                Halaman <?= $page ?> dari <span class='total-pages'><?= $total_page ?></span>
+            </span>
+            <?php if ($page < $total_page): ?>
+            <a class='next-page button-primary' title='Halaman selanjutnya'
+            href='<?= admin_url('admin.php?page=' . InfoPendatang::$name . '&page_no=' . ($page + 1)) ?>'>&rsaquo;</a>
+            <?php endif ?>
+        </div>
+    </div>
+
 </div>
-
-<table class="widefat fixed" cellspacing="0">
-    <thead>
-        <tr>
-            <th class="manage-column column-nama" scope="col">Nama</th>
-            <th class="manage-column column-alamat" scope="col">Alamat</th>
-            <th class="manage-column column-asal-kota" scope="col">Asal Kota</th>
-            <th class="manage-column column-tgl-kepulangan" scope="col">Kedatangan</th>
-            <th class="manage-column column-verified" scope="col">Verified</th>
-            <th class="manage-column column-dibuat" scope="col">Laporan</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($result as $row): ?>
-        <tr  class="alternate info-pendatang-click-row" data-json="<?= esc_attr(json_encode($row)) ?>">
-            <td class="column-nama">
-                <?= esc_html($row->nama) ?: '&mdash;' ?>
-            </td>
-            <td class="column-alamat">
-                <?php
-                $txt = "";
-                if ($row->rt || $row->rw) {
-                    $txt = "{$row->rt}/{$row->rw}";
-                }
-                if ($row->dusun) {
-                    $txt .= " ({$row->dusun})";
-                }
-                echo $txt ? esc_html($txt) : '&mdash;' ?>
-            </td>
-            <td class="column-asal-kota">
-                <?= esc_html($row->asal_kota) ?: '&mdash;' ?>
-            </td>
-            <td class="column-tgl-kepulangan">
-                <?= esc_html($row->tgl_kepulangan) ?: '&mdash;' ?>
-            </td>
-            <td class="column-tgl-verified">
-                <?= $row->verified ? '<span style="color:green">Sudah</span>' : '<span style="color:red">Belum</span>' ?>
-            </td>
-            <td class="column-dibuat">
-                <?= info_pendatang_format_date_indo($row->dibuat) ?>
-            </td>
-        </tr>
-        <?php endforeach; ?>
-
-    </tbody>
-</table>
-
 <div id="info-pendatang-dialog" class="hidden" style="max-width:800px;min-width:300px">
     <table class="form-table">
         <tr>
