@@ -97,7 +97,7 @@ function info_pendatang_list($filter = null, $page = 1, $per_page = 20)
     if ($page < 1) {
         $page = 1;
     }
-    
+
     $start = ($page - 1) *  $per_page;
     $query = "SELECT * FROM " . InfoPendatang::$table .
             " ORDER BY dibuat DESC LIMIT $start, $per_page ";
@@ -146,7 +146,7 @@ function info_pendatang_get_result()
         }
     }
     $query = "SELECT dusun, rt, rw, count(rw) as jml FROM " .
-            InfoPendatang::$table . " GROUP BY rw,rt order by rw,rt";
+            InfoPendatang::$table . " WHERE verified = 1 GROUP BY rw,rt order by rw,rt";
     $result = $wpdb->get_results($query);
     foreach ($result as &$row) {
         if (empty($row->dusun)) {
@@ -209,7 +209,7 @@ function info_pendatang_get_asal_kota()
         return InfoPendatang::result('asal_kota');
     }
     $query = "SELECT asal_kota, count(*) as jml FROM " .
-    InfoPendatang::$table . " group by asal_kota order by jml desc";
+    InfoPendatang::$table . " WHERE verified = 1 group by asal_kota order by jml desc";
     return InfoPendatang::result('asal_kota', $wpdb->get_results($query));
 }
 
@@ -220,7 +220,8 @@ function info_pendatang_get_last_update()
         return InfoPendatang::result('last_update');
     }
 
-    $query = "SELECT max(dibuat) as tgl FROM " .  InfoPendatang::$table;
+    $query = "SELECT max(dibuat) as tgl FROM " .  InfoPendatang::$table .
+    " WHERE verified = 1";
     $tgl   = $wpdb->get_results($query)[0]->tgl;
     return InfoPendatang::result(
         'last_update',
@@ -235,7 +236,8 @@ function info_pendatang_get_total()
     if (InfoPendatang::has_result('total')) {
         return InfoPendatang::result('total');
     } else {
-        $query = "SELECT count(*) as jml FROM " . InfoPendatang::$table;
+        $query = "SELECT count(*) as jml FROM " . InfoPendatang::$table .
+        " WHERE verified = 1";
         $result = $wpdb->get_results($query);
         return InfoPendatang::result('total', $result[0]->jml);
     }
