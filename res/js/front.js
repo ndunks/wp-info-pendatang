@@ -3,34 +3,31 @@
         var width = b.width();
         var start_pos = a.width();
         var end_pos = -width;
+        var timer = 0;
+        var left = 0;
 
         function scroll() {
-            if (b.position().left <= -width) {
-                b.css('left', start_pos);
-                scroll();
-            }
-            else {
-                time = 15000;
-                b.animate({
-                    'left': -width
-                }, time, 'linear', function () {
-                    scroll();
-                });
-            }
+            if (timer) return;
+            timer = setInterval(function () {
+                if (left < end_pos) {
+                    left = start_pos;
+                }
+                b.css('left', --left);
+            }, 10);
         }
 
         b.css({
             'width': width,
-            'left': 0
+            'left': left
         });
-        scroll(a, b);
-        b.mouseenter(function () {     // Remove these lines
-            b.stop();                 //
-            b.clearQueue();           // if you don't want
-        });                           //
-        b.mouseleave(function () {     // marquee to pause
-            scroll(a, b);             //
-        });                           // on mouse over
+        scroll();
+        b.mouseenter(function () {
+            clearInterval(timer);
+            timer = 0;
+        });
+        b.mouseleave(function () {
+            scroll()
+        });
     }
 
     $(document).ready(function () {
