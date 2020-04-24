@@ -25,8 +25,10 @@ if (empty($old)) {
 
 if (!$old['verified'] && $row['verified']) {
     $no = $row['no_hp'] ? $row['no_hp'] : $old['no_hp'];
-    info_pendatang_send_wa($no, InfoPendatang::$config['msg_himbauan']);
-    $row['wa_sent']  = true;
+    
+    if (info_pendatang_send_wa($no, InfoPendatang::$config['msg_himbauan'])) {
+        $row['wa_sent']  = true;
+    }
 }
 
 if (! $wpdb->update(InfoPendatang::$table, $row, ['id' => $id])) {

@@ -230,6 +230,11 @@ function info_pendatang_get_total()
 
 function info_pendatang_send_wa($no, $msg)
 {
+    // Validasi nomor
+    if( !preg_match('/^(0|62)\d{9,13}$/', trim($no,"\r\n +") )){
+        return false;
+    }
+
     $wa_server = InfoPendatang::$config['wa_server'];
     $wa_secret = InfoPendatang::$config['wa_secret'];
 

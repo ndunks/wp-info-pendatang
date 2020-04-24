@@ -37,14 +37,14 @@ $result= $wpdb->get_results($query);
     </div>
 	<div class="tablenav-pages">
         <?php if ($page > 1): ?>
-        <a class='prev-page' title='Halaman sebelumnya'
+        <a class='prev-page button-primary' title='Halaman sebelumnya'
         href='<?= admin_url('admin.php?page=' . InfoPendatang::$name . '&page_no=' . ($page - 1)) ?>'>&lsaquo;</a>
         <?php endif ?>
 		<span class="paging-input">
             Halaman <?= $page ?> dari <span class='total-pages'><?= $total_page ?></span>
         </span>
         <?php if ($page < $total_page): ?>
-        <a class='next-page' title='Halaman selanjutnya'
+        <a class='next-page button-primary' title='Halaman selanjutnya'
         href='<?= admin_url('admin.php?page=' . InfoPendatang::$name . '&page_no=' . ($page + 1)) ?>'>&rsaquo;</a>
         <?php endif ?>
 	</div>
