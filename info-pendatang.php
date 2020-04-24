@@ -13,6 +13,7 @@
  * 1.0.2: send WA after verified
  * 1.0.3: Paging and widget improved
  * 1.0.4: Fix scroll
+ * 1.0.5: text scroll using marquee
  */
 
 define('INFO_PENDATANG_DIR', plugin_dir_path(__FILE__));
