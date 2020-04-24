@@ -10,8 +10,7 @@
                 scroll();
             }
             else {
-                time = (parseInt(b.position().left, 10) - end_pos) *
-                    (15000 / (start_pos - end_pos)); // Increase or decrease speed by changing value 10000
+                time = 15000;
                 b.animate({
                     'left': -width
                 }, time, 'linear', function () {
@@ -22,7 +21,7 @@
 
         b.css({
             'width': width,
-            'left': start_pos
+            'left': 0
         });
         scroll(a, b);
         b.mouseenter(function () {     // Remove these lines
