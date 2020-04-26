@@ -260,6 +260,14 @@ function info_pendatang_send_wa($no, $msg)
         return true;
     } elseif ($code == 403) {
         throw new Exception("Response: $code Secret salah", 500);
+    } elseif( $code == 406 ){
+        if($res[0] == '{'){
+            $json = json_decode($res);
+            if(!empty($json) && isset($res->message) ){
+                throw new Exception($res->message, $code);
+            }
+        }
+        throw new Exception("Response: $code $res", $code);
     } else {
         throw new Exception("Response: $code $res", 500);
     }

@@ -34,10 +34,22 @@
 
       $('#info-pendatang-verified-button').click(function (e) {
         if (confirm('Anda yakin akan memverifikasi data ini?')) {
-          $.post(ajaxurl + '?action=info_pendatang&do=patch&id=' + data.id, {
-            verified: 1
-          }, function () {
-            location.reload();
+          $.ajax({
+            type: "POST",
+            url: ajaxurl + '?action=info_pendatang&do=patch&id=' + data.id,
+            data: {
+              verified: 1,
+              no_hp: me.find('[name="no_hp"]').val()
+            },
+            success: function () {
+              location.reload();
+            },
+            error: function (xhr, textStatus, errorThrown) {
+              console.log(arguments)
+              if (xhr && xhr.responseText) {
+                alert('Mohon Maaf, Terjadi Kesalahan\n' + xhr.responseText);
+              }
+            }
           });
         }
       })
